@@ -166,7 +166,10 @@ const Chat = () => {
               className="btn btn-primary m-1">
               Send Message
             </button>
-            <button onClick={() => sendmessage()} className="btn btn-info m-1">
+            <button onClick={() => {
+              localStorage.removeItem('chatid');
+              window.location.reload();
+            }} className="btn btn-info m-1">
               Reset Session
             </button>
           </>
