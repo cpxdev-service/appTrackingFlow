@@ -51,10 +51,12 @@ const Chat = () => {
           if (result.res.length > 0) {
             setChats(result.res);
             setTimeout(() => {
-              window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: "smooth",
-              });
+              const element = document.getElementById(
+                "scroll-" + (result.res.length - 1)
+              );
+              if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+              }
             }, 100);
           }
         } else {
@@ -86,10 +88,12 @@ const Chat = () => {
               } else {
                 setChats(result.res);
                 setTimeout(() => {
-                  window.scrollTo({
-                    top: document.body.scrollHeight,
-                    behavior: "smooth",
-                  });
+                  const element = document.getElementById(
+                    "scroll-" + (result.res.length - 1)
+                  );
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth" });
+                  }
                 }, 100);
               }
             } else {
@@ -125,7 +129,7 @@ const Chat = () => {
             {chats.map(
               (item, i) =>
                 item.role !== "system" && (
-                  <div className="card mb-2">
+                  <div className="card mb-2" id={"scroll-" + i}>
                     {item.role == "assistant" ? (
                       <div>
                         <p
@@ -166,10 +170,12 @@ const Chat = () => {
               className="btn btn-primary m-1">
               Send Message
             </button>
-            <button onClick={() => {
-              localStorage.removeItem('chatid');
-              window.location.reload();
-            }} className="btn btn-info m-1">
+            <button
+              onClick={() => {
+                localStorage.removeItem("chatid");
+                window.location.reload();
+              }}
+              className="btn btn-info m-1">
               Reset Session
             </button>
           </>
