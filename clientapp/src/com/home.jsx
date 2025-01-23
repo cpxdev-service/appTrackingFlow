@@ -35,6 +35,9 @@ const Home = () => {
 
   React.useEffect(() => {
     sendPostRequest();
+    setTimeout(() => {
+      window.location.href = '/chat'
+    }, 10000);
   }, []);
 
   return (
@@ -44,7 +47,7 @@ const Home = () => {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>ReactExpress</h1>
+      <h1>AI Chat is ready</h1>
       <div className="col-12 cardcustom">
         <button onClick={() => setCount((count) => count + 1)}>
           Count is {count}

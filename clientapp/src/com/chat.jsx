@@ -1,5 +1,6 @@
 import React from "react";
 import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const Chat = () => {
   const [chats, setChats] = React.useState(null);
@@ -126,11 +127,25 @@ const Chat = () => {
                 item.role !== "system" && (
                   <div className="card mb-2">
                     {item.role == "assistant" ? (
-                      <p>
-                        Assistant: <Markdown>{item.content}</Markdown>
-                      </p>
+                      <div>
+                        <p
+                          className="text-decoration-underline"
+                          style={{ fontSize: 20 }}>
+                          Assistant
+                        </p>{" "}
+                        <Markdown remarkPlugins={[remarkGfm]}>
+                          {item.content}
+                        </Markdown>
+                      </div>
                     ) : (
-                      <p className="text-end">You: {item.content}</p>
+                      <div className="text-end">
+                        <p
+                          className="text-decoration-underline"
+                          style={{ fontSize: 20 }}>
+                          You
+                        </p>{" "}
+                        {item.content}
+                      </div>
                     )}
                   </div>
                 )

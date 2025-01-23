@@ -17,7 +17,8 @@
     "react-markdown": "^9.0.3",
     "react-redux": "^9.2.0",
     "react-router-dom": "5.3.4",
-    "reactexpress": "file:.."
+    "reactexpress": "file:..",
+    "remark-gfm": "^4.0.0"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.9.5"
