@@ -36,7 +36,7 @@ app.use('/api/chat', chatai);
 
 // Serve React frontend for all other routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/clientapp/dist/index.html'));
+    res.sendFile(path.join(__dirname, '../clientapp/dist/index.html'));
 });
 
 app.listen(PORT, () => {
