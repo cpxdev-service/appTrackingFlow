@@ -1,0 +1,22 @@
+{
+  "name": "mychat",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm run servertest\" \"npm run client\"",
+    "servertest": "nodemon api/index.js",
+    "server": "npm install --prefix api && npm start --prefix api",
+    "client": "npm run dev --prefix clientapp",
+    "build": "npm run build --prefix clientapp --production=false",
+    "clientsetup": "npm install --prefix clientapp --production=false && npm run build",
+    "start": "npm run clientsetup && npm run server",
+    "pack": "npm run clientsetup"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9"
+  }
+}
