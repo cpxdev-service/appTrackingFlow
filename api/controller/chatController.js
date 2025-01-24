@@ -137,7 +137,7 @@ router.get("/export/:id", (req, res) => {
       if (item.role != "system") {
         chatexport.push({
           role: item.role,
-          content: removeMarkdown(item.content),
+          content: (item.content),
         });
       } else {
         filename = item.content + ".csv";
