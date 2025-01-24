@@ -119,45 +119,4 @@ router.put("/send/:id", (req, res) => {
   }
 });
 
-router.get("/export/:id", (req, res) => {
-  try {
-    const currentid = req.params.id;
-    if (chatData.filter((x) => x.id === currentid).length == 0) {
-      res.json({
-        status: false,
-        message: "This ID not found",
-      });
-      return;
-    }
-    const prevchat = chatData.filter((x) => x.id === currentid)[0].chats;
-    const chatexport = [];
-
-    let filename = "";
-    prevchat.forEach((item, index, arr) => {
-      if (item.role != "system") {
-        chatexport.push({
-          role: item.role,
-          content: (item.content),
-        });
-      } else {
-        filename = item.content + ".csv";
-      }
-    });
-
-    const csv = j2c.json2csv(chatexport, {});
-    res.writeHead(200, {
-      "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition":
-        "attachment;filename=" +
-        (filename !== ".csv" ? filename : currentid + ".csv"),
-    });
-    res.end(csv);
-  } catch (error) {
-    res.json({
-      status: false,
-      message: error,
-    });
-  }
-});
-
 module.exports = router;

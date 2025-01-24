@@ -1,6 +1,7 @@
 import React from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import removeMarkdown from "markdown-to-text";
 
 const Chat = () => {
   const [chats, setChats] = React.useState(null);
@@ -117,6 +118,34 @@ const Chat = () => {
     }, 1000);
   }, []);
 
+  const responsefullexp = () => {
+    let str = "Username,Message\n";
+    chats.forEach((item) => {
+      if (item.role !== "system") {
+        str += `${item.role},${btoa(
+          unescape(encodeURIComponent(removeMarkdown(item.content)))
+        )}\n`;
+      }
+    });
+
+    var element = document.createElement("a");
+    element.setAttribute("href", "data:text/csv," + str);
+    element.setAttribute(
+      "download",
+      localStorage.getItem("chatid") + ".csv"
+    );
+
+    element.style.display = "none";
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+    alert(
+      "Chat is export success. All messages will be encode in Base64 for privacy reason."
+    );
+  };
+
   return (
     <div className="card">
       <div className="card-body">
@@ -182,12 +211,9 @@ const Chat = () => {
                 Reset Session
               </button>
             )}
-            {chats.length > 5 && (
+            {chats.length > 3 && (
               <button
-                onClick={() => {
-                  window.location.href =
-                    "/api/chat/export/" + localStorage.getItem("chatid");
-                }}
+                onClick={() => responsefullexp()}
                 className="btn btn-info m-1">
                 Export Chat
               </button>
