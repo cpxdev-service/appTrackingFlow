@@ -130,10 +130,7 @@ const Chat = () => {
 
     var element = document.createElement("a");
     element.setAttribute("href", "data:text/csv," + str);
-    element.setAttribute(
-      "download",
-      localStorage.getItem("chatid") + ".csv"
-    );
+    element.setAttribute("download", localStorage.getItem("chatid") + ".csv");
 
     element.style.display = "none";
     document.body.appendChild(element);
@@ -153,6 +150,9 @@ const Chat = () => {
         <p className="card-text">
           Notes: Chat History will be in-memory cache on server. If server is
           sleep or update. All chat history will be clear itself.
+        </p>
+        <p className="card-text">
+          Notes: All answers maybe give you for incorrect anytime.
         </p>
         <hr />
         {chats !== null ? (
