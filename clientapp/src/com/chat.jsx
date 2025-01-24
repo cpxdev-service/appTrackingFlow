@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 
 const Chat = () => {
   const [chats, setChats] = React.useState(null);
+  const [reset, setReadytoreset] = React.useState(false);
   const [msg, setMsg] = React.useState("");
 
   const createChat = (keyman) => {
@@ -87,6 +88,7 @@ const Chat = () => {
                 createChat(text);
               } else {
                 setChats(result.res);
+                setReadytoreset(true);
                 setTimeout(() => {
                   const element = document.getElementById(
                     "scroll-" + (result.res.length - 1)
@@ -170,14 +172,26 @@ const Chat = () => {
               className="btn btn-primary m-1">
               Send Message
             </button>
-            <button
-              onClick={() => {
-                localStorage.removeItem("chatid");
-                window.location.reload();
-              }}
-              className="btn btn-info m-1">
-              Reset Session
-            </button>
+            {reset && (
+              <button
+                onClick={() => {
+                  localStorage.removeItem("chatid");
+                  window.location.reload();
+                }}
+                className="btn btn-info m-1">
+                Reset Session
+              </button>
+            )}
+            {chats.length > 5 && (
+              <button
+                onClick={() => {
+                  window.location.href =
+                    "/api/chat/export/" + localStorage.getItem("chatid");
+                }}
+                className="btn btn-info m-1">
+                Export Chat
+              </button>
+            )}
           </>
         ) : (
           <div className="skeleton-loader">
