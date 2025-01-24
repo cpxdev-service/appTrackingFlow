@@ -4,6 +4,7 @@ const uuid4 = require("uuid4");
 const axios = require("axios");
 const j2c = require("json-2-csv");
 const fs = require("fs");
+const removeMarkdown = require("markdown-to-text");
 
 let chatData = [];
 
@@ -136,7 +137,7 @@ router.get("/export/:id", (req, res) => {
       if (item.role != "system") {
         chatexport.push({
           role: item.role,
-          content: item.content,
+          content: removeMarkdown(item.content),
         });
       } else {
         filename = item.content + ".csv";
@@ -145,7 +146,7 @@ router.get("/export/:id", (req, res) => {
 
     const csv = j2c.json2csv(chatexport, {});
     res.writeHead(200, {
-      "Content-Type": "text/csv",
+      "Content-Type": "text/csv; charset=utf-8",
       "Content-Disposition":
         "attachment;filename=" +
         (filename !== ".csv" ? filename : currentid + ".csv"),
