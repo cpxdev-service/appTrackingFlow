@@ -39,7 +39,8 @@ jobs:
         cp -r clientapp/dist/* api/public/
 
     - name: Zip project for deployment
-      run: zip -r app.zip .
+      run: |
+        zip -r app.zip . -x "node_modules/*" "clientapp/node_modules/*" "api/node_modules/*" ".git/*" ".github/*" "app.zip"
       
     - name: 'Deploy to Azure Web App'
       id: deploy-to-webapp
