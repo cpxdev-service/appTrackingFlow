@@ -38,10 +38,12 @@ jobs:
         mkdir -p api/public
         cp -r clientapp/dist/* api/public/
 
-    - name: Zip project for deployment
-      run: |
-        zip -r app.zip . -x "node_modules/*" "clientapp/node_modules/*" "api/node_modules/*" ".git/*" ".github/*" "app.zip"
-      
+    - name: Upload zip artifact (optional)
+      uses: actions/upload-artifact@v4
+      with:
+        name: built-app
+        path: app.zip
+
     - name: 'Deploy to Azure Web App'
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v3
