@@ -12,9 +12,7 @@ const limiter = rateLimit({
   },
 });
 
-const main = require('./controller/mainController');
-const datamock = require('./controller/mockController');
-const chatai = require('./controller/chatController');
+const auth = require('./controller/authController');
 
 const app = express();
 const PORT = process.env.PORT || 5999;
@@ -29,9 +27,7 @@ app.use('/api/*', limiter);
 app.use('/api/*', cors());
 
 // API routes
-app.use('/api', main);
-app.use('/api/mock', datamock);
-app.use('/api/chat', chatai);
+app.use('/api/auth', auth);
 
 
 // Serve React frontend for all other routes

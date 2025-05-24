@@ -120,3 +120,6 @@ table tr:nth-child(2n) {
 table {
   margin-bottom: 10px;
 }
+button {
+  border-radius: 30px !important;
+}

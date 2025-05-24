@@ -35,9 +35,6 @@ const Home = () => {
 
   React.useEffect(() => {
     sendPostRequest();
-    setTimeout(() => {
-      window.location.href = '/chat'
-    }, 10000);
   }, []);
 
   return (

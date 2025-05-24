@@ -1,10 +1,11 @@
 {
-  "name": "mychat",
+  "name": "AppTrackFlow",
   "version": "1.0.0",
   "scripts": {
     "dev": "concurrently \"npm run servertest\" \"npm run client\"",
     "servertest": "nodemon api/index.js",
     "server": "npm install --prefix api && npm start --prefix api",
+    "init": "npm install && npm install --prefix api && npm install --prefix clientapp",
     "client": "npm run dev --prefix clientapp",
     "build": "npm run build --prefix clientapp --production=false",
     "clientsetup": "npm install --prefix clientapp --production=false && npm run build",
