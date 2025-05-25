@@ -2,13 +2,48 @@ import { Outlet } from "react-router-dom";
 import React from "react";
 
 const MainLayout = () => {
+  const [status, setStatus] = React.useState(0);
+  const sendPostRequest = async () => {
+    try {
+      const response = await fetch("/api/status", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // ตรวจสอบสถานะ HTTP
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json(); // แปลง response เป็น JSON
+
+      // ตรวจสอบว่า response status เป็น true หรือไม่
+      if (data.status === true) {
+        setStatus(2);
+      } else {
+        setStatus(1);
+      }
+    } catch (error) {
+      setStatus(0);
+    }
+  };
+
+  React.useEffect(() => {
+    sendPostRequest();
+    setInterval(() => {
+      sendPostRequest();
+    }, 600000);
+  }, []);
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
           <a className="navbar-brand">App Tracking Flow</a>
           <button
-            class="navbar-toggler"
+            className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNavDropdown"
@@ -16,62 +51,80 @@ const MainLayout = () => {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+          <div className="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <a className="nav-link active" aria-current="page" href="#">
                   Home
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
+              <li className="nav-item">
+                <a className="nav-link" href="#">
                   Features
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
+              <li className="nav-item">
+                <a className="nav-link" href="#">
                   Pricing
                 </a>
               </li>
-              <li class="nav-item dropdown">
+              <li className="nav-item dropdown">
                 <a
-                  class="nav-link dropdown-toggle"
+                  className="nav-link dropdown-toggle"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   More
                 </a>
-                <ul class="dropdown-menu">
+                <ul className="dropdown-menu">
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <a className="dropdown-item" href="#">
                       About
                     </a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <a className="dropdown-item" href="#">
                       Contact
                     </a>
                   </li>
-                  <li>
-                    <a class="dropdown-item" href="#">
-                      Status: Operational
-                    </a>
+                  <hr />
+                  <li
+                    className={
+                      status === 2
+                        ? "dropdown-item text-success"
+                        : status === 1
+                        ? "dropdown-item text-info"
+                        : "dropdown-item text-danger"
+                    }
+                  >
+                    Status:{" "}
+                    {status === 2
+                      ? "Operational"
+                      : status === 1
+                      ? "Partial Outage"
+                      : "Major Outage"}
                   </li>
                 </ul>
               </li>
             </ul>
+            <button
+              className="mt-2 d-lg-none d-block btn btn-outline-primary"
+              type="button"
+            >
+              Login
+            </button>
           </div>
-          <form className="d-flex" role="search">
-            <button className="btn btn-outline-success" type="button">
+          <form className="d-lg-flex d-none" role="search">
+            <button className="btn btn-outline-primary" type="button">
               Login
             </button>
           </form>
         </div>
       </nav>
-      <main>
+      <main style={{ marginTop: 80 }}>
         <Outlet />
       </main>
       <footer className="text-center mt-5">
