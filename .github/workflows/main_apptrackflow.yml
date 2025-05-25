@@ -13,6 +13,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+    - name: Clear old files
+      run: rm -rf ./*
+      
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -20,9 +23,6 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '22.x' # ปรับตาม version ที่คุณใช้
-
-    - name: Clear old files
-      run: rm -rf ./*
       
     - name: Install client dependencies
       run: npm install --prefix clientapp
