@@ -19,20 +19,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
-
-      # ติดตั้ง root (ถ้ามี workspace tool เช่น concurrently)
-      - run: npm ci
+          node-version: '22.x'
 
       # ---------- Build React (Vite) ----------
       - name: Install & build client
         run: |
-          npm ci --prefix clientapp
+          npm install --prefix clientapp
           npm run build --prefix clientapp          # สร้าง dist/
 
       # ---------- Install API  ----------
       - name: Install API deps
-        run: npm ci --prefix api
+        run: npm install --prefix api
 
       # ---------- รวม static ----------
       - name: Copy static into API
