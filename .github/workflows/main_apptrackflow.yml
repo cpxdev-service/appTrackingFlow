@@ -23,20 +23,7 @@ jobs:
 
       # ---------- Build React (Vite) ----------
       - name: Install & build client
-        run: |
-          npm install --prefix clientapp
-          npm run build --prefix clientapp          # สร้าง dist/
-
-      # ---------- Install API  ----------
-      - name: Install API deps
-        run: npm install --prefix api
-
-      # ---------- รวม static ----------
-      - name: Copy static into API
-        run: |
-          rm -rf api/public
-          mkdir -p api/public
-          cp -r clientapp/dist/* api/public/
+        run: npm run startproduction
 
       # ---------- สร้าง ZIP ----------
       - name: Package for deploy
@@ -52,12 +39,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    environment:
-      name: Production
-      url: ${{ steps.deploy.outputs.webapp-url }}
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - uses: actions/download-artifact@v4
         with:
