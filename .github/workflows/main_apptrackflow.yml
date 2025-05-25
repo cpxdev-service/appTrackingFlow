@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Node.js app to Azure Web App - apptrackflow
+name: Build and deploy Node.js + React (Vite) to Azure Web App - apptrackflow
 
 on:
   push:
@@ -13,29 +10,47 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
 
-      - name: npm install, build, and test
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install and build client (Vite)
         run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          npm ci --prefix clientapp
+          npm run build --prefix clientapp
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+      - name: Install API dependencies
+        run: npm ci --prefix api
 
-      - name: Upload artifact for deployment job
+      - name: Prepare artifact for deployment
+        run: |
+          rm -rf release
+          mkdir -p release/api
+          # copy server code
+          cp -R api/* release/api/
+          # copy client build output
+          mkdir -p release/client
+          cp -R clientapp/dist/* release/client/
+          # copy package.json and lockfile for Azure to install / startup
+          cp package.json package-lock.json release/
+          # create zip
+          cd release
+          zip -r ../release.zip ./*
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
+          name: nodeapp-artifact
           path: release.zip
 
   deploy:
@@ -45,30 +60,28 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: node-app
+          name: nodeapp-artifact
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-      
-      - name: Login to Azure
+      - name: Unzip artifact
+        run: unzip release.zip -d release
+
+      - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F8873E2003BD46F3A0F1AD4F971AAF67 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_53B007A8ACBF4C91ACCF5A22A418217B }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8DA1A36281E240BBBD18436EE78E344E }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'apptrackflow'
-          slot-name: 'Production'
-          package: .
-          
+          package: 'release'      # หรือใช้ 'release.zip' ก็ได้
