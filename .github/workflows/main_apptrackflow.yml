@@ -29,8 +29,6 @@ jobs:
       # ---------- สร้าง ZIP ----------
       - name: Package for deploy
         run: |
-          rm -rf node_modules
-          rm -rf api/node_modules
           rm -rf clientapp/node_modules
      
       - name: Zip artifact for deployment
