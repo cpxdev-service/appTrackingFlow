@@ -19,7 +19,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '18.x' # ปรับตาม version ที่คุณใช้
+        node-version: '22.x' # ปรับตาม version ที่คุณใช้
 
     - name: Install client dependencies
       run: npm install --prefix clientapp
