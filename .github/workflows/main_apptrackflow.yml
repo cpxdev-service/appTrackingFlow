@@ -1,79 +1,43 @@
-name: CI/CD – Node + Vite to Azure
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy Node.js app to Azure Web App - apptrackflow
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
-env:
-  NODE_VERSION: '20.x'            # เวอร์ชันที่ Azure รองรับ
-
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '22.x'
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.x' # ปรับตาม version ที่คุณใช้
 
-      # ---------- Build React (Vite) ----------
-      - name: Install & build client
-        run: |
-          npm install --prefix clientapp
-          npm run build --prefix clientapp          # สร้าง dist/
+    - name: Install client dependencies
+      run: npm install --prefix clientapp
 
-      # ---------- Install API  ----------
-      - name: Install API deps
-        run: npm install --prefix api
+    - name: Build client
+      run: npm run build --prefix clientapp
 
-      # ---------- รวม static ----------
-      - name: Copy static into API
-        run: |
-          rm -rf api/public
-          mkdir -p api/public
-          cp -r clientapp/dist/* api/public/
+    - name: Copy built files to api/public
+      run: mkdir -p api/public && cp -r clientapp/dist/* api/public/
 
-      # ---------- สร้าง ZIP ----------
-      - name: Package for deploy
-        run: |
-          cd api
-          zip -r ../release.zip ./*
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: webapp-package
-          path: release.zip
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: Production
-      url: ${{ steps.deploy.outputs.webapp-url }}
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: webapp-package
-
-      - name: Azure login (OIDC)
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Deploy to Azure Web App
-        id: deploy
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: apptrackflow
-          slot-name: Production
-          package: release.zip
+    - name: Install server dependencies
+      run: npm install --prefix api
+      
+    - name: 'Deploy to Azure Web App'
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: 'apptrackflow'
+        slot-name: 'Production'
+        package: './api'
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_666B9985F8B34278B000BCC6A10CA0DA }}
