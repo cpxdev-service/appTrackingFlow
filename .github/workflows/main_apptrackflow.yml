@@ -25,7 +25,7 @@ jobs:
       run: npm run build --prefix clientapp
 
     - name: Copy built files to api/public
-      run: mkdir -p api/public && cp -r clientapp/dist/* api/public/
+      run: mkdir -p api/clientapp/dist && cp -r clientapp/dist/* api/clientapp/dist
 
     - name: Install server dependencies
       run: npm install --prefix api
