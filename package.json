@@ -10,6 +10,7 @@
     "build": "npm run build --prefix clientapp --production=false",
     "clientsetup": "npm install --prefix clientapp --production=false && npm run build",
     "start": "npm run clientsetup && npm run server",
+    "startproduction": "npm run clientsetup && npm install --prefix api",
     "pack": "npm run clientsetup"
   },
   "keywords": [],
