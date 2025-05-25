@@ -13,8 +13,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Clear old files
-      run: rm -rf ./*
       
     - name: Checkout code
       uses: actions/checkout@v2
@@ -31,7 +29,7 @@ jobs:
       run: npm run build --prefix clientapp
 
     - name: Copy built files to api/public
-      run: mkdir -p api/public && cp -r clientapp/dist/* api/public/
+      run: rm -rf clientapp/dist/* && mkdir -p api/public && cp -r clientapp/dist/* api/public/
 
     - name: Install server dependencies
       run: npm install --prefix api
