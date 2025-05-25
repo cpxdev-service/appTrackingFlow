@@ -28,7 +28,9 @@ jobs:
       # ---------- สร้าง ZIP ----------
       - name: Package for deploy
         run: |
-          cd api
+          rm -rf node_modules
+          rm -rf api/node_modules
+          rm -rf clientapp/node_modules
           zip -r ../release.zip ./*
 
       - uses: actions/upload-artifact@v4
