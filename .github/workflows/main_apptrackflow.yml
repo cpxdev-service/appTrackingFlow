@@ -38,7 +38,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-          az webapp ssh --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name apptrackflow --command "rm -rf /home/site/*"
+          az webapp ssh --resource-group apptrackflow_group-8ab1 --name apptrackflow --command "rm -rf /home/site/*"
             
     - name: 'Deploy to Azure Web App'
       id: deploy-to-webapp
