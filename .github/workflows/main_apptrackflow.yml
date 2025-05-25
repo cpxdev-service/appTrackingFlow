@@ -33,12 +33,6 @@ jobs:
 
     - name: Install server dependencies
       run: npm install --prefix api
-      
-    - name: Clear wwwroot folder
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          az webapp ssh --resource-group apptrackflow_group-8ab1 --name apptrackflow --command "rm -rf ./site/*"
             
     - name: 'Deploy to Azure Web App'
       id: deploy-to-webapp
