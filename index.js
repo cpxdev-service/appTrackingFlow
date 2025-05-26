@@ -23,7 +23,7 @@ const limiter = rateLimit({
 const auth = require("./controller/authController");
 
 const app = express();
-const PORT = 5999;
+const PORT = process.env.PORT || 5999;
 
 // Serve static files from React app
 app.use(express.static(path.join(__dirname, "./clientapp/dist")));
