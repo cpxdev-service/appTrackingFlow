@@ -21,25 +21,15 @@ function App() {
   return (
     <Routes>
       <Route element={<MainLayout />}>
-        <Route exact path="/" render={() => <Home data-aos="fade-in" />} />
-        <Route
-          exact
-          path="/login"
-          render={() => <Login data-aos="fade-in" />}
-        />
+        <Route index element={<Home data-aos="fade-in" />} />
+        <Route index path="/login" element={<Login data-aos="fade-in" />} />
       </Route>
-      {
-        localStorage.getItem("isAdmin") !== null && (
-          <Route element={<AdminLayout />}>
-            <Route
-              exact
-              path={`${adminBase}`}
-              render={() => <div>Admin Dashboard</div>}
-            />
-            {/* Add more admin routes here */}
-          </Route>
-        )
-      }
+      {localStorage.getItem("isAdmin") !== null && (
+        <Route path={`${adminBase}`} element={<AdminLayout />}>
+          <Route index element={<div>Admin Dashboard</div>} />
+          {/* Add more admin routes here */}
+        </Route>
+      )}
     </Routes>
   );
 }

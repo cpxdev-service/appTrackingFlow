@@ -1,8 +1,9 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import React from "react";
 
 const MainLayout = () => {
   const [status, setStatus] = React.useState(0);
+  const his = useNavigate();
   const sendPostRequest = async () => {
     try {
       const response = await fetch("/api/status", {
@@ -41,7 +42,7 @@ const MainLayout = () => {
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <a className="navbar-brand">App Tracking Flow</a>
+          <Link className="navbar-brand" to="/">App Tracking Flow</Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -49,46 +50,39 @@ const MainLayout = () => {
             data-bs-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown"
             aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
+            aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
-                  Home
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" to="/feature">
                   Features
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" to="/plan">
                   Pricing
-                </a>
+                </Link>
               </li>
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
                   role="button"
                   data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+                  aria-expanded="false">
                   More
                 </a>
                 <ul className="dropdown-menu">
                   <li>
-                    <a className="dropdown-item" href="#">
+                    <Link className="dropdown-item" to="/about">
                       About
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
+                    <Link className="dropdown-item" to="/about">
                       Contact
-                    </a>
+                    </Link>
                   </li>
                   <hr />
                   <li
@@ -98,8 +92,7 @@ const MainLayout = () => {
                         : status === 1
                         ? "dropdown-item text-info"
                         : "dropdown-item text-danger"
-                    }
-                  >
+                    }>
                     Status:{" "}
                     {status === 2
                       ? "Operational"
@@ -111,14 +104,17 @@ const MainLayout = () => {
               </li>
             </ul>
             <button
+              onClick={() => his("/login")}
               className="mt-2 d-lg-none d-block btn btn-outline-primary"
-              type="button"
-            >
+              type="button">
               Login
             </button>
           </div>
           <form className="d-lg-flex d-none" role="search">
-            <button className="btn btn-outline-primary" type="button">
+            <button
+              className="btn btn-outline-primary"
+              onClick={() => his("/login")}
+              type="button">
               Login
             </button>
           </form>

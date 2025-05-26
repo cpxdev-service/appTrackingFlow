@@ -38,7 +38,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="roothome">
+    <div>
       <div>
         <a href="https://react.dev" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
