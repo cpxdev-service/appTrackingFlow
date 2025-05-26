@@ -1,0 +1,20 @@
+name: Delete old workflow runs
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  delete_runs:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: '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'
+          repository: cpxdev-service/appTrackingFlow
+          retain_days: 1
+          keep_minimum_runs: 6
