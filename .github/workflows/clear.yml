@@ -15,6 +15,6 @@ jobs:
         uses: Mattraks/delete-workflow-runs@v2
         with:
           token: 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
-          repository: cpxdev-service/cpxdevwebapi
+          repository: cpxdev-service/appTrackingFlow
           retain_days: 1
           keep_minimum_runs: 6
