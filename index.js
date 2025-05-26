@@ -26,7 +26,7 @@ const app = express();
 const PORT = 5999;
 
 // Serve static files from React app
-app.use(express.static(path.join(__dirname, "/clientapp/dist")));
+app.use(express.static(path.join(__dirname, "./clientapp/dist")));
 
 app.use(express.json());
 
@@ -53,7 +53,7 @@ app.use("/api/auth", auth);
 
 // Serve React frontend for all other routes
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/clientapp/dist/index.html"));
+  res.sendFile(path.join(__dirname, "./clientapp/dist/index.html"));
 });
 
 app.listen(PORT, () => {
