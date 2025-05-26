@@ -49,7 +49,7 @@ app.post("/api/status", async (req, res) => {
     });
   }
 });
-app.use("/api/auth", auth);
+app.use("/auth", auth);
 
 // Serve React frontend for all other routes
 app.get("*", (req, res) => {

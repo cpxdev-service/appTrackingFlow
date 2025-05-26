@@ -21,17 +21,21 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "concurrently": "^9.1.2",
-    "nodemon": "^3.1.9",
     "axios": "^1.7.9",
+    "concurrently": "^9.1.2",
+    "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
+    "firebase": "^11.8.1",
     "fs": "^0.0.1-security",
     "json-2-csv": "^5.5.7",
+    "jsonwebtoken": "^9.0.2",
     "markdown-to-text": "^0.1.1",
     "mongodb": "^6.16.0",
+    "nodemon": "^3.1.9",
     "uuid4": "^2.0.3"
   }
 }
