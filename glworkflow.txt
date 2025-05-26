@@ -24,11 +24,11 @@ jobs:
     - name: Build client
       run: npm run build --prefix clientapp
 
-    - name: Copy built files to api/public
-      run: mkdir -p api/public && cp -r clientapp/dist/* api/public/
+    - name: Copy built files to clientapp/dist
+      run: mkdir -p clientapp/dist && cp -r clientapp/dist/* clientapp/dist
 
     - name: Install server dependencies
-      run: npm install --prefix api
+      run: npm install
       
     - name: 'Deploy to Azure Web App'
       id: deploy-to-webapp
@@ -36,5 +36,5 @@ jobs:
       with:
         app-name: 'ค่านี้ใช้ค่าตอน gen จาก azure app'
         slot-name: 'Production'
-        package: './api'
+        package: '.'
         publish-profile: 'ค่านี้ใช้ค่าตอน gen จาก azure app'

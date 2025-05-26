@@ -1,24 +1,37 @@
 {
-  "name": "AppTrackFlow",
+  "name": "apptrackflowapi",
   "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "api": "node index.js",
     "dev": "concurrently \"npm run servertest\" \"npm run client\"",
     "servertest": "nodemon api/index.js",
-    "server": "npm install --prefix api && npm start --prefix api",
-    "init": "npm install && npm install --prefix api && npm install --prefix clientapp",
+    "server": "npm install && npm run api",
+    "init": "npm install && npm install --prefix clientapp",
     "client": "npm run dev --prefix clientapp",
     "build": "npm run build --prefix clientapp --production=false",
     "clientsetup": "npm install --prefix clientapp --production=false && npm run build",
     "start": "npm run clientsetup && npm run server",
-    "startproduction": "npm run clientsetup && npm install --prefix api",
+    "startproduction": "npm run clientsetup && npm install",
     "pack": "npm run clientsetup"
   },
   "keywords": [],
-  "author": "",
+  "author": "CPXDevStudio",
   "license": "ISC",
   "description": "",
-  "devDependencies": {
+  "dependencies": {
     "concurrently": "^9.1.2",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "fs": "^0.0.1-security",
+    "json-2-csv": "^5.5.7",
+    "markdown-to-text": "^0.1.1",
+    "mongodb": "^6.16.0",
+    "uuid4": "^2.0.3"
   }
 }

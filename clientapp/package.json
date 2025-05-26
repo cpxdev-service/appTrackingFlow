@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
     "AppTrackFlow": "file:..",
+    "apptrackflowapi": "file:..",
     "markdown-to-text": "^0.1.1",
     "mychat": "file:..",
     "react": "^18.3.1",
