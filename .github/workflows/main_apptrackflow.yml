@@ -24,9 +24,6 @@ jobs:
     - name: Build client
       run: npm run build --prefix clientapp
 
-    - name: Copy built files to clientapp/dist
-      run: mkdir -p clientapp/dist && cp -r clientapp/dist/* clientapp/dist
-
     - name: Install server dependencies
       run: npm install
       
