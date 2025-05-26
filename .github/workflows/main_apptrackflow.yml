@@ -26,8 +26,8 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
+          npm install --prefix clientap
           npm run build --prefix clientapp
-          npm install --prefix clientapp
           npm run test --if-present
 
       - name: Zip artifact for deployment
