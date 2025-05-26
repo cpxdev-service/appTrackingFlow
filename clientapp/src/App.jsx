@@ -8,6 +8,8 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css"; // Import AOS styles
 
 import MainLayout from "./layout/main.jsx";
 import AdminLayout from "./layout/admin.jsx";
@@ -18,6 +20,12 @@ import Login from "./com/login.jsx";
 const adminBase = "/management";
 
 function App() {
+  React.useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
+  }, []);
   return (
     <Routes>
       <Route element={<MainLayout />}>
