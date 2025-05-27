@@ -24,7 +24,8 @@ const Login = ({ setMainLoad, setLoginSession }) => {
         t: token,
       })
       .then(function (response) {
-        localStorage.setItem("isAdmin", true);
+        localStorage.setItem("isAdmin", response.data.token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
         setLoginSession(true);
         setMainLoad(false);
         his(import.meta.env.VITE_ADMIN_BASE);

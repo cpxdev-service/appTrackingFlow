@@ -1,9 +1,8 @@
 const express = require("express")
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail } = require("../service/firebaseInit");
 const router = express.Router()
-const { generateToken } = require("../service/token");
+const { generateToken, verifyToken } = require("../service/token");
 const { verifyCf } = require("../service/cfCheck");
-var cookieSession = require('cookie-session')
 
 const auth = getAuth();
 
@@ -27,22 +26,9 @@ router.post("/login", (req, res, next) => {
     signInWithEmailAndPassword(auth, req.body.u, atob(req.body.p))
         .then((userCredential) => {
             if (userCredential.user.emailVerified) {
-                cookieSession({
-                    name: 'loginsession',
-                    secure: true,
-                    keys: [generateToken(userCredential.user, process.env.LOGIN, '1h')],
-                    maxAge: 1 * 60 * 60 * 1000
-                })
-                if (req.body.r) {
-                    cookieSession({
-                        name: 'refreshsession',
-                        secure: true,
-                        keys: [generateToken(userCredential.user, process.env.REFRESH, '30d')],
-                        maxAge: 720 * 60 * 60 * 1000
-                    })
-                }
                 res.json({
-                    status: true
+                    status: true,
+                    token: generateToken(userCredential.user, process.env.LOGIN, '3h')
                 });
             } else {
                 const user = userCredential.user;
@@ -110,6 +96,18 @@ router.post("/resetpass", (req, res, next) => {
                 msg: error.message
             });
         });
+});
+
+router.delete("/signout", (req, res, next) => {
+    if (verifyToken(req) === null) {
+        res.status(403).json({
+            status: false
+        });
+        return;
+    }
+    res.json({
+        status: true
+    });
 });
 
 module.exports = router;

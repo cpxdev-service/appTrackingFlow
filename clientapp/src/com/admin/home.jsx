@@ -40,20 +40,7 @@ const Home = ({ setLoginSession }) => {
     sendPostRequest();
   }, []);
 
-  return (
-    <div>
-      Admin is OK
-      <button
-        className="btn btn-outline-primary"
-        onClick={() => {
-          localStorage.removeItem("isAdmin");
-          his("/");
-        }}
-        type="button">
-        Signout
-      </button>
-    </div>
-  );
+  return <div>Admin is OK</div>;
 };
 
 const mapStateToProps = (state) => ({

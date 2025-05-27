@@ -19,8 +19,11 @@ import Home from "./com/home.jsx";
 import Login from "./com/login.jsx";
 import Regis from "./com/register.jsx";
 import Reset from "./com/resetpass.jsx";
+import axios from "axios";
 
 import HomeAdmin from "./com/admin/home.jsx";
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("isAdmin")}`;
 
 const adminBase = import.meta.env.VITE_ADMIN_BASE;
 
