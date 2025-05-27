@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": {
+      "/service": {
         target: `http://localhost:${process.env.PORT || 5999}`, // URL ของ Backend
         changeOrigin: true,
       },

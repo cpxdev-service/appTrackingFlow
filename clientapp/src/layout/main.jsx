@@ -1,12 +1,14 @@
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import React from "react";
+import { connect } from "react-redux";
+import { setMainLoad } from "../redux/action";
 
-const MainLayout = () => {
+const MainLayout = ({ mainload }) => {
   const [status, setStatus] = React.useState(0);
   const his = useNavigate();
   const sendPostRequest = async () => {
     try {
-      const response = await fetch("/api/status", {
+      const response = await fetch("/service/status", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +44,9 @@ const MainLayout = () => {
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">App Tracking Flow</Link>
+          <Link className="navbar-brand" to="/">
+            App Tracking Flow
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -126,8 +130,21 @@ const MainLayout = () => {
       <footer className="text-center mt-5">
         <p>&copy; {new Date().getFullYear()} CPXDev Studio</p>
       </footer>
+      <div
+        className="spin"
+        data-aos="fade-in"
+        data-aos-once="false"
+        style={{ display: mainload ? "flex" : "none" }}>
+        <span class="loader"></span>
+      </div>
     </div>
   );
 };
 
-export default MainLayout;
+const mapStateToProps = (state) => ({
+  mainload: state.mainload,
+});
+const mapDispatchToProps = (dispatch) => ({
+  setMainLoad: (val) => dispatch(setMainLoad(val)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(MainLayout);

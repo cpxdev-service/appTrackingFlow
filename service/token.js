@@ -6,18 +6,18 @@ function generateToken(user, skey, exp) {
     return jwt.sign({ userId: user.id }, skey, { expiresIn: exp });
 }
 
-function verifyToken(req, res, next) {
+function verifyToken(req) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (!token) {
-        return res.status(401).json({ message: 'No token provided' });
+        return false;
     }
     jwt.verify(token, secretKey, (err, user) => {
         if (err) {
-            return res.status(403).json({ message: 'Invalid token' });
+            return false;
         }
         req.user = user;
-        next();
+        return true;
     });
 }
 

@@ -16,8 +16,9 @@ import AdminLayout from "./layout/admin.jsx";
 
 import Home from "./com/home.jsx";
 import Login from "./com/login.jsx";
+import Regis from "./com/register.jsx";
 
-const adminBase = "/management";
+const adminBase = import.meta.env.VITE_ADMIN_BASE;
 
 function App() {
   React.useEffect(() => {
@@ -31,6 +32,7 @@ function App() {
       <Route element={<MainLayout />}>
         <Route index element={<Home data-aos="fade-in" />} />
         <Route index path="/login" element={<Login data-aos="fade-in" />} />
+        <Route index path="/register" element={<Regis data-aos="fade-in" />} />
       </Route>
       {localStorage.getItem("isAdmin") !== null && (
         <Route path={`${adminBase}`} element={<AdminLayout />}>
