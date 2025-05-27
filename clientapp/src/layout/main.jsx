@@ -5,6 +5,7 @@ import { setMainLoad } from "../redux/action";
 
 const MainLayout = ({ mainload }) => {
   const [status, setStatus] = React.useState(0);
+  const [menuTog, setMenu] = React.useState(false);
   const his = useNavigate();
   const sendPostRequest = async () => {
     try {
@@ -50,12 +51,17 @@ const MainLayout = ({ mainload }) => {
           <button
             className="navbar-toggler"
             type="button"
+            onClick={() => setMenu(!menuTog)}
             data-bs-toggle="collapse"
             data-bs-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown"
             aria-expanded="false"
             aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
+            {menuTog ? (
+              <i class="bi bi-x" style={{ fontSize: 30 }}></i>
+            ) : (
+              <span className="navbar-toggler-icon"></span>
+            )}
           </button>
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
@@ -107,20 +113,38 @@ const MainLayout = ({ mainload }) => {
                 </ul>
               </li>
             </ul>
-            <button
-              onClick={() => his("/login")}
-              className="mt-2 d-lg-none d-block btn btn-outline-primary"
-              type="button">
-              Login
-            </button>
+            {localStorage.getItem("isAdmin") !== null ? (
+              <button
+                onClick={() => his(import.meta.env.VITE_ADMIN_BASE)}
+                className="mt-2 d-lg-none d-block btn btn-outline-primary"
+                type="button">
+                Go to Dashboard
+              </button>
+            ) : (
+              <button
+                onClick={() => his("/login")}
+                className="mt-2 d-lg-none d-block btn btn-outline-primary"
+                type="button">
+                Login
+              </button>
+            )}
           </div>
           <form className="d-lg-flex d-none" role="search">
-            <button
-              className="btn btn-outline-primary"
-              onClick={() => his("/login")}
-              type="button">
-              Login
-            </button>
+            {localStorage.getItem("isAdmin") !== null ? (
+              <button
+                className="btn btn-outline-primary"
+                onClick={() => his(import.meta.env.VITE_ADMIN_BASE)}
+                type="button">
+                Go to Dashboard
+              </button>
+            ) : (
+              <button
+                className="btn btn-outline-primary"
+                onClick={() => his("/login")}
+                type="button">
+                Login
+              </button>
+            )}
           </form>
         </div>
       </nav>

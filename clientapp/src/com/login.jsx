@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { setMainLoad } from "../redux/action";
+import { setMainLoad, setLoginSession } from "../redux/action";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Turnstile, { useTurnstile } from "react-turnstile";
 
-const Login = ({ setMainLoad }) => {
+const Login = ({ setMainLoad, setLoginSession }) => {
   const turnstile = useTurnstile();
   const [token, setCfToken] = React.useState("");
   const his = useNavigate();
@@ -24,15 +24,16 @@ const Login = ({ setMainLoad }) => {
         t: token,
       })
       .then(function (response) {
-        setMainLoad(false);
         localStorage.setItem("isAdmin", true);
+        setLoginSession(true);
+        setMainLoad(false);
         his(import.meta.env.VITE_ADMIN_BASE);
         console.log(response);
       })
       .catch(function (error) {
         setMainLoad(false);
         console.log(error);
-        setCfToken("")
+        setCfToken("");
         turnstile.reset();
         Swal.fire({
           title: "Something went wrong",
@@ -48,11 +49,11 @@ const Login = ({ setMainLoad }) => {
         <div className="card-body">
           <h3 className="card-title">Login to App Tracking Flow Dashboard</h3>
           <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item active" aria-current="page">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item active" aria-current="page">
                 Login
               </li>
-              <li class="breadcrumb-item">
+              <li className="breadcrumb-item">
                 <Link to="/register">Register</Link>
               </li>
             </ol>
@@ -60,37 +61,37 @@ const Login = ({ setMainLoad }) => {
 
           <hr />
           <form onSubmit={(e) => onLogin(e)} autoComplete="off">
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">
+            <div className="mb-3">
+              <label for="exampleInputEmail1" className="form-label">
                 Email address
               </label>
               <input
                 required
                 type="email"
-                class="form-control"
+                className="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
               />
             </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+            <div className="mb-3">
+              <label for="exampleInputPassword1" className="form-label">
                 Password
               </label>
               <input
                 minlength="10"
                 type="password"
-                class="form-control"
+                className="form-control"
                 id="exampleInputPassword1"
                 required
               />
             </div>
-            <div class="mb-3 form-check">
+            <div className="mb-3 form-check">
               <input
                 type="checkbox"
-                class="form-check-input"
+                className="form-check-input"
                 id="exampleCheck1"
               />
-              <label class="form-check-label" for="exampleCheck1">
+              <label className="form-check-label" for="exampleCheck1">
                 Remember Login session
               </label>
             </div>
@@ -99,14 +100,22 @@ const Login = ({ setMainLoad }) => {
               onVerify={(token) => {
                 setCfToken(token);
               }}
-              onExpire={() => setCfToken('')}
+              onExpire={() => setCfToken("")}
             />
-            <button
-              type="submit"
-              class="btn btn-primary"
-              disabled={token === ""}>
-              Login
-            </button>
+            <div className="btn-group" role="group" aria-label="Basic example">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={token === ""}>
+                Login
+              </button>
+              <button
+                type="button"
+                onClick={() => his("/reset")}
+                className="btn btn-info">
+                Reset Account
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -118,6 +127,7 @@ const mapStateToProps = (state) => ({
   mainload: state.mainload,
 });
 const mapDispatchToProps = (dispatch) => ({
+  setLoginSession: (val) => dispatch(setLoginSession(val)),
   setMainLoad: (val) => dispatch(setMainLoad(val)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -4,3 +4,9 @@ export function setMainLoad(val) {
         payload: val
     };
 }
+export function setLoginSession(val) {
+    return {
+        type: 'SETLOGIN',
+        payload: val
+    };
+}

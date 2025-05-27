@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 function generateToken(user, skey, exp) {
-    return jwt.sign({ userId: user.id }, skey, { expiresIn: exp });
+    return jwt.sign({ userId: user.email }, skey, { expiresIn: exp });
 }
 
 function verifyToken(req) {
