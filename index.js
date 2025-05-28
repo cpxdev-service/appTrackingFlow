@@ -21,6 +21,7 @@ const limiter = rateLimit({
 });
 
 const auth = require("./controller/authController");
+const apppath = require("./controller/applistController");
 
 const app = express();
 const PORT = process.env.PORT || 5999;
@@ -53,6 +54,7 @@ app.post("/service/status", async (req, res) => {
   }
 });
 app.use("/service/auth", auth);
+app.use("/service/app", apppath);
 
 // Serve React frontend for all other routes
 app.get("*", (req, res) => {
