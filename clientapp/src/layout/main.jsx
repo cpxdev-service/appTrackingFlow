@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { setMainLoad } from "../redux/action";
 
-const MainLayout = ({ mainload }) => {
+const MainLayout = ({ isCheckLogin, login, mainload }) => {
   const [status, setStatus] = React.useState(0);
   const [menuTog, setMenu] = React.useState(false);
   const his = useNavigate();
@@ -35,11 +35,17 @@ const MainLayout = ({ mainload }) => {
   };
 
   React.useEffect(() => {
+    if (isCheckLogin == true && login) {
+      his("/management");
+      return;
+    }
     sendPostRequest();
     setInterval(() => {
       sendPostRequest();
     }, 600000);
   }, []);
+
+  if (isCheckLogin == true && login) return null
 
   return (
     <div>
@@ -167,6 +173,7 @@ const MainLayout = ({ mainload }) => {
 
 const mapStateToProps = (state) => ({
   mainload: state.mainload,
+  login: state.login,
 });
 const mapDispatchToProps = (dispatch) => ({
   setMainLoad: (val) => dispatch(setMainLoad(val)),

@@ -86,16 +86,6 @@ const Login = ({ setMainLoad, setLoginSession }) => {
                 required
               />
             </div>
-            <div className="mb-3 form-check">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                id="exampleCheck1"
-              />
-              <label className="form-check-label" for="exampleCheck1">
-                Remember Login session
-              </label>
-            </div>
             <Turnstile
               sitekey={import.meta.env.VITE_CF_PUB}
               onVerify={(token) => {

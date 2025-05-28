@@ -6,7 +6,7 @@ export function setMainLoad(val) {
 }
 export function setLoginSession(val) {
     return {
-        type: 'SETLOGIN',
+        type: 'SET_LOGIN',
         payload: val
     };
 }

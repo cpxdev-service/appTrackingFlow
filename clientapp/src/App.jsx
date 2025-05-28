@@ -23,7 +23,9 @@ import axios from "axios";
 
 import HomeAdmin from "./com/admin/home.jsx";
 axios.defaults.withCredentials = true;
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("isAdmin")}`;
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+  "isAdmin"
+)}`;
 
 const adminBase = import.meta.env.VITE_ADMIN_BASE;
 
@@ -38,17 +40,29 @@ function App({ login }) {
     <Routes>
       <Route element={<MainLayout />}>
         <Route index element={<Home data-aos="fade-in" />} />
-        <Route index path="/login" element={<Login data-aos="fade-in" />} />
-        <Route index path="/register" element={<Regis data-aos="fade-in" />} />
-        <Route index path="/reset" element={<Reset data-aos="fade-in" />} />
+      </Route>
+      <Route element={<MainLayout isCheckLogin={true} />}>
+        <Route
+          index
+          path="/login"
+          element={login == false && <Login data-aos="fade-in" />}
+        />
+        <Route
+          index
+          path="/register"
+          element={login == false && <Regis data-aos="fade-in" />}
+        />
+        <Route
+          index
+          path="/reset"
+          element={login == false && <Reset data-aos="fade-in" />}
+        />
         <Route index path="*" element={<Home data-aos="fade-in" />} />
       </Route>
-      {login && (
-        <Route path={`${adminBase}`} element={<AdminLayout />}>
-          <Route index element={<HomeAdmin data-aos="fade-in" />} />
-          {/* Add more admin routes here */}
-        </Route>
-      )}
+      <Route path={`${adminBase}`} element={<AdminLayout />}>
+        <Route index element={<HomeAdmin data-aos="fade-in" />} />
+        {/* Add more admin routes here */}
+      </Route>
     </Routes>
   );
 }

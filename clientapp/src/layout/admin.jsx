@@ -19,7 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Button } from "@mui/material";
+import { Button, Backdrop, CircularProgress } from "@mui/material";
 
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -28,11 +28,17 @@ import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 
 const drawerWidth = 240;
 
-const AdminLayout = () => {
+const AdminLayout = ({ mainload, login }) => {
   const his = useNavigate();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!login) {
+      his("/");
+    }
+  }, []);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -108,11 +114,13 @@ const AdminLayout = () => {
     axios
       .delete("/service/auth/signout", {})
       .then(function (response) {
-        localStorage.removeItem("isAdmin");
-        setLoginSession(false);
-        setMainLoad(false);
-        his("/");
-        console.log(response);
+        setTimeout(() => {
+          localStorage.removeItem("isAdmin");
+          setLoginSession(false);
+          setMainLoad(false);
+          his("/");
+          console.log(response);
+        }, 3000);
       })
       .catch(function (error) {
         setMainLoad(false);
@@ -127,25 +135,7 @@ const AdminLayout = () => {
       });
   };
 
-  // return (
-  //   <div className="main-layout">
-  //     <header>
-  //       <h1>Welcome to the Main Layout</h1>
-  //       <button
-  //         className="btn btn-outline-primary"
-  //         onClick={() => onSignout()}
-  //         type="button">
-  //         Signout
-  //       </button>
-  //     </header>
-  //     <main style={{ marginTop: 80 }}>
-  //       <Outlet />
-  //     </main>
-  //     <footer className="text-center mt-5">
-  //       <p>&copy; {new Date().getFullYear()} CPXDev Studio</p>
-  //     </footer>
-  //   </div>
-  // );
+  if (!login) return null;
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -238,12 +228,18 @@ const AdminLayout = () => {
         <Toolbar />
         <Outlet />
       </Box>
+      <Backdrop
+        sx={(theme) => ({ color: "#fff", zIndex: 5000 })}
+        open={mainload}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Box>
   );
 };
 
 const mapStateToProps = (state) => ({
   mainload: state.mainload,
+  login: state.login,
 });
 const mapDispatchToProps = (dispatch) => ({
   setMainLoad: (val) => dispatch(setMainLoad(val)),
