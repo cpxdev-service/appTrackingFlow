@@ -6,19 +6,22 @@ function generateToken(user, skey, exp) {
 }
 
 function verifyToken(req) {
-    const authHeader = req.headers.authorization;
-    const token = authHeader.split(' ')[1];
-    if (token == null) {
-        return null;
-    }
-    jwt.verify(token, process.env.LOGIN, (err, user) => {
-        if (err) {
-            
+    try {
+        const authHeader = req.headers.authorization;
+        const token = authHeader.split(' ')[1];
+        if (token == null) {
             return null;
         }
-        console.log('jwt', user)
-        return user;
-    });
+        jwt.verify(token, process.env.LOGIN, (err, user) => {
+            if (err) {
+
+                return null;
+            }
+            return user;
+        });
+    } catch {
+        return null;
+    }
 }
 
 module.exports = {

@@ -11,8 +11,17 @@ const client = new MongoClient(process.env.DB, {
   },
 });
 
-const limiter = rateLimit({
+const apilimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
+  max: 200,
+  message: {
+    status: false,
+    message: "Too many requests, please try again later.",
+  },
+});
+
+const limiter = rateLimit({
+  windowMs: 1000, // 1 minute
   max: 30,
   message: {
     status: false,
@@ -21,11 +30,12 @@ const limiter = rateLimit({
 });
 
 const auth = require("./controller/authController");
-const apppath = require("./controller/applistController");
+const apppath = require("./controller/appController");
 
 const app = express();
 const PORT = process.env.PORT || 5999;
-const apipath = ["/v1/*"]
+const apipath = ["/v1"]
+const appservicepath = ["/service"]
 
 // Serve static files from React app
 app.use(express.static(path.join(__dirname, "./clientapp/dist")));
@@ -34,8 +44,11 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 apipath.forEach(element => {
-  app.use(element, limiter);
+  app.use(element, apilimiter);
   app.use(element, cors());
+});
+appservicepath.forEach(element => {
+  app.use(element, limiter);
 });
 
 // API routes
