@@ -72,4 +72,4 @@ jobs:
       - name: Clear latest deploy package
       - uses: geekyeggo/delete-artifact@v5
         with:
-            name: node-app
+          name: node-app
