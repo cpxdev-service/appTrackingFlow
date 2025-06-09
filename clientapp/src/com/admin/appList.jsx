@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { setMainLoad } from "../../redux/action";
+import { setMainLoad, setLoginSession } from "../../redux/action";
 import axios from "axios";
 
-const AppList = ({ setMainLoad }) => {
+const AppList = ({ setMainLoad, setLoginSession }) => {
   const his = useNavigate();
   const [count, setCount] = useState(0);
   const [data, setData] = useState([]);
@@ -18,7 +18,7 @@ const AppList = ({ setMainLoad }) => {
           setData(response.data.responses);
           setTimeout(() => {
             setMainLoad(false);
-          }, 2000);
+          }, 1000);
         } else if (response.data.auth == false) {
           alert("Session timeout");
           setMainLoad(true);
@@ -33,6 +33,7 @@ const AppList = ({ setMainLoad }) => {
       })
       .catch(function (error) {
         setMainLoad(true);
+        alert('Session timeout')
         localStorage.removeItem("isAdmin");
         setTimeout(() => {
           setLoginSession(false);
@@ -55,5 +56,6 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   setMainLoad: (val) => dispatch(setMainLoad(val)),
+  setLoginSession: (val) => dispatch(setLoginSession(val)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AppList);

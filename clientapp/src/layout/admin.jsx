@@ -60,7 +60,7 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
 
   const drawer = (
     <div>
-      <List>
+      <List onClick={handleDrawerClose}>
         <ListItem
           component={Link}
           to={import.meta.env.VITE_ADMIN_BASE}
@@ -72,7 +72,7 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
             display: { xs: "none", sm: "initial" },
           }}>
           <ListItemButton>
-            <ListItemText className="text-center m-2">
+            <ListItemText className="text-center m-2 text-dark">
               <b>App Tracking Flow</b>
             </ListItemText>
           </ListItemButton>
@@ -86,7 +86,7 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
             <ListItemIcon>
               <SpaceDashboardIcon />
             </ListItemIcon>
-            <ListItemText primary="Dashboard" />
+            <ListItemText className="text-dark" primary="Dashboard" />
           </ListItemButton>
         </ListItem>
         <ListItem
@@ -97,7 +97,7 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
             <ListItemIcon>
               <AccountTreeIcon />
             </ListItemIcon>
-            <ListItemText primary="App Flow" />
+            <ListItemText className="text-dark" primary="App Flow" />
           </ListItemButton>
         </ListItem>
         <ListItem
@@ -108,7 +108,7 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
             <ListItemIcon>
               <CodeIcon />
             </ListItemIcon>
-            <ListItemText primary="API Access" />
+            <ListItemText className="text-dark" primary="API Access" />
           </ListItemButton>
         </ListItem>
         <ListItem
@@ -119,7 +119,7 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
             <ListItemIcon>
               <SupportAgentIcon />
             </ListItemIcon>
-            <ListItemText primary="Support" />
+            <ListItemText className="text-dark" primary="Support" />
           </ListItemButton>
         </ListItem>
       </List>
