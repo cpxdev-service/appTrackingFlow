@@ -57,11 +57,6 @@ jobs:
         with:
           name: node-app
 
-      - name: Clear latest deploy package
-        uses: geekyeggo/delete-artifact@v5
-        with:
-          name: node-app
-
       - name: Unzip artifact for deployment
         run: unzip release.zip
       
@@ -73,5 +68,10 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DD7565E49A8840C5AC92648494042B0A }}
+
+      - name: Clear latest deploy package
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: node-app
 
    
