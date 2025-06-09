@@ -36,6 +36,11 @@ function App({ login }) {
       once: true,
     });
   }, []);
+
+ React.useEffect(() => {
+    console.log('login state', login)
+  }, [login]);
+
   return (
     <Routes>
       <Route element={<MainLayout />}>

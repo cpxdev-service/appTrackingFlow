@@ -28,7 +28,7 @@ import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 
 const drawerWidth = 240;
 
-const AdminLayout = ({ mainload, login }) => {
+const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
   const his = useNavigate();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -114,8 +114,8 @@ const AdminLayout = ({ mainload, login }) => {
     axios
       .delete("/service/auth/signout", {})
       .then(function (response) {
+        localStorage.removeItem("isAdmin");
         setTimeout(() => {
-          localStorage.removeItem("isAdmin");
           setLoginSession(false);
           setMainLoad(false);
           his("/");
