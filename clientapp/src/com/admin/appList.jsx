@@ -3,34 +3,33 @@ import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { setMainLoad } from "../../redux/action";
 import axios from "axios";
-// import viteLogo from "../vite.svg";
 
-const Home = ({ setMainLoad }) => {
+const AppList = ({ setMainLoad }) => {
   const his = useNavigate();
   const [count, setCount] = useState(0);
-  const [status, setStatus] = useState(0);
+  const [data, setData] = useState([]);
 
   const sendPostRequest = async () => {
     setMainLoad(true);
     axios
-      .post("/service/status", {})
+      .get("/service/app/all", {})
       .then(function (response) {
         if (response.data.status === true) {
+          setData(response.data.responses);
           setTimeout(() => {
             setMainLoad(false);
-          }, 700);
+          }, 2000);
         }
       })
       .catch(function (error) {
-        setMainLoad(false);
-        console.log(error);
-        setCfToken("");
-        turnstile.reset();
-        Swal.fire({
-          title: "Something went wrong",
-          text: error.response.data.msg,
-          icon: "error",
-        });
+        setMainLoad(true);
+        localStorage.removeItem("isAdmin");
+        setTimeout(() => {
+          setLoginSession(false);
+          setMainLoad(false);
+          his("/");
+          console.log(response);
+        }, 3000);
       });
   };
 
@@ -38,10 +37,13 @@ const Home = ({ setMainLoad }) => {
     sendPostRequest();
   }, []);
 
-  return <div>Admin is OK</div>;
+  return <div>Fetch App list</div>;
 };
 
+const mapStateToProps = (state) => ({
+  mainload: state.mainload,
+});
 const mapDispatchToProps = (dispatch) => ({
   setMainLoad: (val) => dispatch(setMainLoad(val)),
 });
-export default connect(null, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(AppList);

@@ -22,6 +22,8 @@ import Reset from "./com/resetpass.jsx";
 import axios from "axios";
 
 import HomeAdmin from "./com/admin/home.jsx";
+import AppAdmin from "./com/admin/appList.jsx";
+
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "isAdmin"
@@ -66,6 +68,7 @@ function App({ login }) {
       </Route>
       <Route path={`${adminBase}`} element={<AdminLayout />}>
         <Route index element={<HomeAdmin data-aos="fade-in" />} />
+        <Route index path='app' element={<AppAdmin data-aos="fade-in" />} />
         {/* Add more admin routes here */}
       </Route>
     </Routes>

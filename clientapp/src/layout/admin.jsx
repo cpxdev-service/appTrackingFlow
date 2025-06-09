@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { setMainLoad, setLoginSession } from "../redux/action";
 import axios from "axios";
@@ -27,6 +27,9 @@ import CodeIcon from "@mui/icons-material/Code";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 
 const drawerWidth = 240;
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+  "isAdmin"
+)}`;
 
 const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
   const his = useNavigate();
@@ -59,6 +62,8 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
     <div>
       <List>
         <ListItem
+          component={Link}
+          to={import.meta.env.VITE_ADMIN_BASE}
           disablePadding
           color="primary"
           sx={{
@@ -73,7 +78,10 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
           </ListItemButton>
         </ListItem>
         <Divider />
-        <ListItem disablePadding>
+        <ListItem
+          disablePadding
+          component={Link}
+          to={import.meta.env.VITE_ADMIN_BASE}>
           <ListItemButton>
             <ListItemIcon>
               <SpaceDashboardIcon />
@@ -81,7 +89,10 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
             <ListItemText primary="Dashboard" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
+        <ListItem
+          disablePadding
+          component={Link}
+          to={import.meta.env.VITE_ADMIN_BASE + "/app"}>
           <ListItemButton>
             <ListItemIcon>
               <AccountTreeIcon />
@@ -89,7 +100,10 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
             <ListItemText primary="App Flow" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
+        <ListItem
+          disablePadding
+          component={Link}
+          to={import.meta.env.VITE_ADMIN_BASE + "/api"}>
           <ListItemButton>
             <ListItemIcon>
               <CodeIcon />
@@ -97,7 +111,10 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
             <ListItemText primary="API Access" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
+        <ListItem
+          disablePadding
+          component={Link}
+          to={import.meta.env.VITE_ADMIN_BASE + "/support"}>
           <ListItemButton>
             <ListItemIcon>
               <SupportAgentIcon />

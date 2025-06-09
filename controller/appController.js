@@ -25,7 +25,7 @@ router.get("/all", async (req, res, next) => {
         const collection = db.collection('appInstance');
 
         const docs = await collection.find({}).toArray();
-        res.json({
+        res.status(200).json({
             status: true,
             auth: true,
             response: docs

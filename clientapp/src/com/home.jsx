@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import reactLogo from "../assets/react.svg";
-// import viteLogo from "../vite.svg";
+import { connect } from "react-redux";
+import { setMainLoad } from "../redux/action";
 
-const Home = () => {
+const Home = ({setMainLoad}) => {
   const [count, setCount] = useState(0);
   const [status, setStatus] = useState(0);
 
   const sendPostRequest = async () => {
     try {
-      const response = await fetch("/api", {
+      const response = await fetch("/service/status", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,4 +72,8 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapDispatchToProps = (dispatch) => ({
+  setMainLoad: (val) => dispatch(setMainLoad(val)),
+  setLoginSession: (val) => dispatch(setLoginSession(val)),
+});
+export default connect(null, mapDispatchToProps)(Home);
