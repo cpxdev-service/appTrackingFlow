@@ -14,9 +14,12 @@ function verifyToken(req) {
         }
         jwt.verify(token, process.env.LOGIN, (err, user) => {
             if (err) {
-
                 return null;
             }
+            if (Math.floor(Date.now() / 1000) > user.exp) {
+                return null;
+            }
+            console.log(user)
             return user;
         });
     } catch {

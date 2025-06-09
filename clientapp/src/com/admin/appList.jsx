@@ -14,11 +14,21 @@ const AppList = ({ setMainLoad }) => {
     axios
       .get("/service/app/all", {})
       .then(function (response) {
-        if (response.data.status === true) {
+        if (response.data.auth == true && response.data.status === true) {
           setData(response.data.responses);
           setTimeout(() => {
             setMainLoad(false);
           }, 2000);
+        } else if (response.data.auth == false) {
+          alert("Session timeout");
+          setMainLoad(true);
+          localStorage.removeItem("isAdmin");
+          setTimeout(() => {
+            setLoginSession(false);
+            setMainLoad(false);
+            his("/");
+            console.log(response);
+          }, 3000);
         }
       })
       .catch(function (error) {

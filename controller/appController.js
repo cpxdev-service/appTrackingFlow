@@ -10,7 +10,7 @@ const client = new MongoClient(process.env.DB, {
 });
 
 router.get("/all", async (req, res, next) => {
-    if (verifyToken(req) === null) {
+    if (verifyToken(req) == null) {
         res.status(401).json({
             status: true,
             auth: false
