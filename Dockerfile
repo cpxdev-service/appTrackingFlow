@@ -5,6 +5,7 @@ RUN npm i
 
 # คัดลอกโค้ดทั้งหมดไปยัง container
 COPY . .
+RUN rm -rf clientapp/node_modules
 
 # สร้าง environment variable สำหรับ port (default 3000)
 ENV PORT=8080
