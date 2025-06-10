@@ -69,6 +69,9 @@ function App({ login }) {
       <Route path={`${adminBase}`} element={<AdminLayout />}>
         <Route index element={<HomeAdmin data-aos="fade-in" />} />
         <Route index path='app' element={<AppAdmin data-aos="fade-in" />} />
+        <Route index path='app/:appId' element={<AppAdmin data-aos="fade-in" />} />
+        <Route index path='api' element={<AppAdmin data-aos="fade-in" />} />
+        <Route index path='support' element={<AppAdmin data-aos="fade-in" />} />
         {/* Add more admin routes here */}
       </Route>
     </Routes>

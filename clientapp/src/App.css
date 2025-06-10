@@ -51,8 +51,6 @@
   color: #888;
 }
 
-
-
 /* สไตล์พื้นฐานสำหรับ skeleton */
 .skeleton {
   background-color: #e0e0e0;
@@ -120,10 +118,11 @@ table tr:nth-child(2n) {
 table {
   margin-bottom: 10px;
 }
-button {
+.MuiButton-root {
   border-radius: 30px !important;
 }
-.navbar{
+
+.navbar {
   position: fixed;
   width: 100%;
   top: 0;

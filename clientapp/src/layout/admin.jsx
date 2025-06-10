@@ -27,6 +27,7 @@ import CodeIcon from "@mui/icons-material/Code";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 
 const drawerWidth = 240;
+const adminBase = import.meta.env.VITE_ADMIN_BASE;
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "isAdmin"
 )}`;
@@ -60,19 +61,25 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
 
   const drawer = (
     <div>
-      <List onClick={handleDrawerClose}>
+      <List onClick={handleDrawerClose} disablePadding>
         <ListItem
           component={Link}
           to={import.meta.env.VITE_ADMIN_BASE}
           disablePadding
+          className="head"
           color="primary"
           sx={{
             flexGrow: 1,
             backgroundColor: "#1976d2",
+            borderColor: "#1976d2",
             display: { xs: "none", sm: "initial" },
           }}>
-          <ListItemButton>
-            <ListItemText className="text-center m-2 text-dark">
+          <ListItemButton
+            sx={{
+              height: 64,
+              color: "#1976d2",
+            }}>
+            <ListItemText className="text-center">
               <b>App Tracking Flow</b>
             </ListItemText>
           </ListItemButton>
@@ -81,6 +88,11 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
         <ListItem
           disablePadding
           component={Link}
+          sx={
+            window.location.pathname == adminBase + ""
+              ? { background: "#80aaf2", color: "#fff" }
+              : {}
+          }
           to={import.meta.env.VITE_ADMIN_BASE}>
           <ListItemButton>
             <ListItemIcon>
@@ -92,6 +104,11 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
         <ListItem
           disablePadding
           component={Link}
+          sx={
+            window.location.pathname.includes(adminBase + "/app")
+              ? { background: "#80aaf2", color: "#fff" }
+              : {}
+          }
           to={import.meta.env.VITE_ADMIN_BASE + "/app"}>
           <ListItemButton>
             <ListItemIcon>
@@ -103,6 +120,11 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
         <ListItem
           disablePadding
           component={Link}
+          sx={
+            window.location.pathname.includes(adminBase + "/api")
+              ? { background: "#80aaf2", color: "#fff" }
+              : {}
+          }
           to={import.meta.env.VITE_ADMIN_BASE + "/api"}>
           <ListItemButton>
             <ListItemIcon>
@@ -114,6 +136,11 @@ const AdminLayout = ({ mainload, login, setMainLoad, setLoginSession }) => {
         <ListItem
           disablePadding
           component={Link}
+          sx={
+            window.location.pathname.includes(adminBase + "/support")
+              ? { background: "#80aaf2", color: "#fff" }
+              : {}
+          }
           to={import.meta.env.VITE_ADMIN_BASE + "/support"}>
           <ListItemButton>
             <ListItemIcon>

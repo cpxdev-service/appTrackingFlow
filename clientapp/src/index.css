@@ -79,7 +79,7 @@ button:focus-visible {
   animation: rotation 1s linear infinite;
 }
 .loader::after {
-  content: '';  
+  content: "";
   box-sizing: border-box;
   position: absolute;
   left: 0;
@@ -88,7 +88,7 @@ button:focus-visible {
   bottom: 0;
   margin: auto;
   border: 3px solid;
-  border-color: transparent #FF3D00 #FF3D00;
+  border-color: transparent #ff3d00 #ff3d00;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -103,8 +103,8 @@ button:focus-visible {
   100% {
     transform: rotate(360deg);
   }
-} 
-    
+}
+
 @keyframes rotationBack {
   0% {
     transform: rotate(0deg);
@@ -113,7 +113,7 @@ button:focus-visible {
     transform: rotate(-360deg);
   }
 }
-.spin{
+.spin {
   position: fixed;
   top: 0;
   width: 100vw;
@@ -124,4 +124,8 @@ button:focus-visible {
   z-index: 9000 !important;
   background-color: #1a1a1acf;
 }
-    
+
+.head > .MuiButtonBase-root {
+  background-color: #1976d2 !important;
+  color: #fff !important;
+}

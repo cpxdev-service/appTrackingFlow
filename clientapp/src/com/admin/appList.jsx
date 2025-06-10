@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  CardHeader,
+  Button,
+  Card,
+  CardContent,
+  CardActions,
+  ButtonGroup,
+  Typography,
+} from "@mui/material";
 import { connect } from "react-redux";
 import { setMainLoad, setLoginSession } from "../../redux/action";
 import axios from "axios";
 
-const AppList = ({ setMainLoad, setLoginSession }) => {
+const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
   const his = useNavigate();
-  const [count, setCount] = useState(0);
   const [data, setData] = useState([]);
 
   const sendPostRequest = async () => {
@@ -15,7 +23,7 @@ const AppList = ({ setMainLoad, setLoginSession }) => {
       .get("/service/app/all", {})
       .then(function (response) {
         if (response.data.auth == true && response.data.status === true) {
-          setData(response.data.responses);
+          setData(response.data.response);
           setTimeout(() => {
             setMainLoad(false);
           }, 1000);
@@ -33,7 +41,7 @@ const AppList = ({ setMainLoad, setLoginSession }) => {
       })
       .catch(function (error) {
         setMainLoad(true);
-        alert('Session timeout')
+        alert("Session timeout");
         localStorage.removeItem("isAdmin");
         setTimeout(() => {
           setLoginSession(false);
@@ -48,7 +56,162 @@ const AppList = ({ setMainLoad, setLoginSession }) => {
     sendPostRequest();
   }, []);
 
-  return <div>Fetch App list</div>;
+  return (
+    <div>
+      <CardHeader
+        title="App Flow Instance Management"
+        action={!mainload && <Button variant="outlined">Create new App Flow</Button>}
+      />
+      {/* <Card className="mt-2">
+        <CardContent>
+          <CardHeader
+            title={"ชื่อแอป"}
+            subheader={"Status: Activated"}
+            action={
+              <ButtonGroup
+                variant="contained"
+                sx={{ borderRadius: 30 }}
+                aria-label="Basic button group">
+                <Button
+                  sx={{
+                    borderTopRightRadius: "0px !important",
+                    borderBottomRightRadius: "0px !important",
+                  }}>
+                  Edit
+                </Button>
+                <Button
+                  sx={{
+                    borderTopLeftRadius: "0px !important",
+                    borderBottomLeftRadius: "0px !important",
+                  }}>
+                  Delete
+                </Button>
+              </ButtonGroup>
+            }
+          />
+          <Typography className="m-3 mt-0">
+            5 tracking steps, 237 job process in tracking
+          </Typography>
+        </CardContent>
+      </Card>
+      <Card className="mt-2">
+        <CardContent>
+          <CardHeader
+            title={"ชื่อแอป"}
+            subheader={"Status: Temporary pause"}
+            action={
+              <ButtonGroup
+                variant="contained"
+                sx={{ borderRadius: 30 }}
+                aria-label="Basic button group">
+                <Button
+                  sx={{
+                    borderTopRightRadius: "0px !important",
+                    borderBottomRightRadius: "0px !important",
+                  }}>
+                  Edit
+                </Button>
+                <Button
+                  sx={{
+                    borderTopLeftRadius: "0px !important",
+                    borderBottomLeftRadius: "0px !important",
+                  }}>
+                  Delete
+                </Button>
+              </ButtonGroup>
+            }
+          />
+          <Typography className="m-3 mt-0">
+            5 tracking steps, 100 job process in tracking
+          </Typography>
+        </CardContent>
+      </Card>
+      <Card className="mt-2">
+        <CardContent>
+          <CardHeader
+            title={"ชื่อแอป"}
+            subheader={"Status: Not ready"}
+            action={
+              <ButtonGroup
+                variant="contained"
+                sx={{ borderRadius: 30 }}
+                aria-label="Basic button group">
+                <Button
+                  sx={{
+                    borderTopRightRadius: "0px !important",
+                    borderBottomRightRadius: "0px !important",
+                  }}>
+                  Edit
+                </Button>
+                <Button
+                  sx={{
+                    borderTopLeftRadius: "0px !important",
+                    borderBottomLeftRadius: "0px !important",
+                  }}>
+                  Delete
+                </Button>
+              </ButtonGroup>
+            }
+          />
+          <Typography className="m-3 mt-0">
+            5 tracking steps, 0 job process in tracking
+          </Typography>
+        </CardContent>
+      </Card> */}
+
+      {!mainload && data.length > 0 ? (
+        data.map((item) => (
+          <Card className="mt-2" key={item.id}>
+            <CardContent>
+              <CardHeader
+                title={item.appName}
+                subheader={
+                  item.active == true && item.pause == false
+                    ? "Status: Activated"
+                    : item.active == true && item.pause == true
+                    ? "Status: Temporary pause"
+                    : "Status: Not ready"
+                }
+                action={
+                  <ButtonGroup
+                    variant="contained"
+                    sx={{ borderRadius: 30 }}
+                    aria-label="Basic button group">
+                    <Button
+                      sx={{
+                        borderTopRightRadius: "0px !important",
+                        borderBottomRightRadius: "0px !important",
+                      }}>
+                      Edit
+                    </Button>
+                    <Button
+                      sx={{
+                        borderTopLeftRadius: "0px !important",
+                        borderBottomLeftRadius: "0px !important",
+                      }}>
+                      Delete
+                    </Button>
+                  </ButtonGroup>
+                }
+              />
+              <Typography className="m-3 mt-0">
+                5 tracking steps, 0 job process in tracking
+              </Typography>
+            </CardContent>
+          </Card>
+        ))
+      ) : !mainload && data.length == 0 ? (
+        <Card className="mt-2">
+          <CardContent className="text-center">
+            <CardHeader
+              title="Starting is so easy!"
+              subheader="Create new App Flow Instance to get started"
+            />
+          </CardContent>
+        </Card>
+      ) : null}
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => ({
