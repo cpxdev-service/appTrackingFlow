@@ -36,6 +36,7 @@
     "markdown-to-text": "^0.1.1",
     "mongodb": "^6.16.0",
     "nodemon": "^3.1.9",
+    "uuid": "^11.1.0",
     "uuid4": "^2.0.3"
   }
 }

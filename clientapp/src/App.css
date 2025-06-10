@@ -121,7 +121,9 @@ table {
 .MuiButton-root {
   border-radius: 30px !important;
 }
-
+.btn {
+  border-radius: 20px !important;
+}
 .navbar {
   position: fixed;
   width: 100%;

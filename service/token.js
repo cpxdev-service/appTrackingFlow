@@ -10,18 +10,19 @@ function verifyToken(req) {
         const authHeader = req.headers.authorization;
         const token = authHeader.split(' ')[1];
         if (token == null) {
-            return null;
+            throw new Error("Parameter is not a number!");
         }
+        let use = null;
         jwt.verify(token, process.env.LOGIN, (err, user) => {
             if (err) {
-                return null;
+                throw new Error("Parameter is not a number!");
             }
             if (Math.floor(Date.now() / 1000) > user.exp) {
-                return null;
+                throw new Error("Parameter is not a number!");
             }
-            console.log(user)
-            return user;
+            use = user
         });
+        return use;
     } catch {
         return null;
     }

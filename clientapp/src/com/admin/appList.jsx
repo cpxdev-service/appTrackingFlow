@@ -16,6 +16,7 @@ import axios from "axios";
 const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
   const his = useNavigate();
   const [data, setData] = useState([]);
+  const [addModal, setModal] = useState(false);
 
   const sendPostRequest = async () => {
     setMainLoad(true);
@@ -40,15 +41,8 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
         }
       })
       .catch(function (error) {
-        setMainLoad(true);
-        alert("Session timeout");
-        localStorage.removeItem("isAdmin");
-        setTimeout(() => {
-          setLoginSession(false);
           setMainLoad(false);
-          his("/");
-          console.log(response);
-        }, 3000);
+          alert('Unexpected error. Please try again.')
       });
   };
 
@@ -210,6 +204,10 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
           </CardContent>
         </Card>
       ) : null}
+
+      <Drawer open={addModal} onClose={() => {}}>
+  
+</Drawer>
     </div>
   );
 };
