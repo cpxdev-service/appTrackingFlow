@@ -1,9 +1,16 @@
 FROM node:22-alpine
-RUN mkdir -p /home/node/app
-WORKDIR /home/node/app
+WORKDIR /app
 COPY package*.json ./
-USER node
-RUN npm install
-COPY --chown=node:node . .
-EXPOSE 8080
-CMD [ "npm","start" ]
+RUN npm i
+
+# คัดลอกโค้ดทั้งหมดไปยัง container
+COPY . .
+
+# สร้าง environment variable สำหรับ port (default 3000)
+ENV PORT=8080
+
+# เปิด port ที่ app จะรัน
+EXPOSE $PORT
+
+# คำสั่งรัน app (ใช้ node ตรงๆ หรือ pm2 ถ้าต้องการ process manager)
+CMD ["npm", "start"]
