@@ -20,7 +20,7 @@ function verifyToken(req) {
                if (Math.floor(Date.now() / 1000) > user.exp) {
                 use = null;
                } else {
-                  use = user: 
+                  use = user;
                }
             }
         });
