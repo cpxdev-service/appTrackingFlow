@@ -3,6 +3,12 @@ const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sen
 const router = express.Router()
 const { generateToken, verifyToken } = require("../service/token");
 const { verifyCf } = require("../service/cfCheck");
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const client = new MongoClient(process.env.DB, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+    },
+});
 
 const auth = getAuth();
 
@@ -24,8 +30,20 @@ router.post("/login", (req, res, next) => {
         return;
     }
     signInWithEmailAndPassword(auth, req.body.u, atob(req.body.p))
-        .then((userCredential) => {
+        .then(async (userCredential) => {
             if (userCredential.user.emailVerified) {
+                const db = client.db('management');
+                const collection = db.collection('user');
+
+                const checkacct = await collection.find({ userId: userCredential.user.uid }).toArray();
+                if (checkacct.length == 0) {
+                    await collection.insertOne({
+                        userId: userCredential.user.uid,
+                        email: userCredential.user.email,
+                        appQuota: 10,
+                        jobLimit: 100,
+                    });
+                }
                 res.json({
                     status: true,
                     token: generateToken(userCredential.user, process.env.LOGIN, '3h')
