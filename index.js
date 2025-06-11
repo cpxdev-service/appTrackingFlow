@@ -30,6 +30,7 @@ const limiter = rateLimit({
 });
 
 const auth = require("./controller/authController");
+const dash = require("./controller/dashController");
 const apppath = require("./controller/appController");
 
 const app = express();
@@ -67,6 +68,7 @@ app.post("/service/status", async (req, res) => {
   }
 });
 app.use("/service/auth", auth);
+app.use("/service/dash", dash);
 app.use("/service/app", apppath);
 
 // Serve React frontend for all other routes

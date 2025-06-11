@@ -13,7 +13,7 @@ const Home = ({ setMainLoad }) => {
   const sendPostRequest = async () => {
     setMainLoad(true);
     axios
-      .post("/service/status", {})
+      .get("/service/dash/status", {})
       .then(function (response) {
         if (response.data.status === true) {
           setTimeout(() => {
