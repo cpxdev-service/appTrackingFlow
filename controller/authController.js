@@ -99,7 +99,7 @@ router.post("/resetpass", (req, res, next) => {
 });
 
 router.delete("/signout", (req, res, next) => {
-    if (verifyToken(req) === null) {
+    if (verifyToken(req) == null) {
         res.status(403).json({
             status: false
         });

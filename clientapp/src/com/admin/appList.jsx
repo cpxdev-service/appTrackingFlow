@@ -17,6 +17,7 @@ import axios from "axios";
 const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
   const his = useNavigate();
   const [data, setData] = useState([]);
+  const [edit, setCreateNow] = useState(false);
   const [addModal, setModal] = useState(false);
 
   const sendPostRequest = async () => {
@@ -26,6 +27,7 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
       .then(function (response) {
         if (response.data.auth == true && response.data.status === true) {
           setData(response.data.response);
+          setCreateNow(true);
           setTimeout(() => {
             setMainLoad(false);
           }, 1000);
@@ -42,8 +44,8 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
         }
       })
       .catch(function (error) {
-          setMainLoad(false);
-          alert('Unexpected error. Please try again.')
+        setMainLoad(false);
+        alert("Unexpected error. Please try again.");
       });
   };
 
@@ -55,7 +57,13 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
     <div>
       <CardHeader
         title="App Flow Instance Management"
-        action={!mainload && <Button variant="outlined">Create new App Flow</Button>}
+        action={
+          !mainload && (
+            <Button variant="outlined" disabled={!edit}>
+              Create new App Flow
+            </Button>
+          )
+        }
       />
       {/* <Card className="mt-2">
         <CardContent>
@@ -173,6 +181,7 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
                     sx={{ borderRadius: 30 }}
                     aria-label="Basic button group">
                     <Button
+                      disabled={!edit}
                       sx={{
                         borderTopRightRadius: "0px !important",
                         borderBottomRightRadius: "0px !important",
@@ -180,6 +189,7 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
                       Edit
                     </Button>
                     <Button
+                      disabled={!edit}
                       sx={{
                         borderTopLeftRadius: "0px !important",
                         borderBottomLeftRadius: "0px !important",
@@ -206,9 +216,7 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
         </Card>
       ) : null}
 
-      <Drawer open={addModal} onClose={() => {}}>
-  
-</Drawer>
+      <Drawer open={addModal} onClose={() => {}}></Drawer>
     </div>
   );
 };

@@ -6,28 +6,22 @@ function generateToken(user, skey, exp) {
 }
 
 function verifyToken(req) {
-    try {
-        const authHeader = req.headers.authorization;
-        const token = authHeader.split(' ')[1];
-        if (token == null) {
-            throw new Error("Parameter is not a number!");
-        }
-        let use = null;
-        jwt.verify(token, process.env.LOGIN, (err, user) => {
-            if (err) {
-                use = null;
-            } else {
-               if (Math.floor(Date.now() / 1000) > user.exp) {
-                use = null;
-               } else {
-                  use = user;
-               }
-            }
-        });
-        return use;
-    } catch {
-        return null;
-    }
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return null;
+
+  const parts = authHeader.split(' ');
+  if (parts.length !== 2 || parts[0] !== 'Bearer') return null;
+
+  const token = parts[1];
+  if (!token) return null;
+
+  try {
+    const payload = jwt.verify(token, process.env.LOGIN);
+
+    return payload;
+  } catch (err) {
+    return null;
+  }
 }
 
 module.exports = {

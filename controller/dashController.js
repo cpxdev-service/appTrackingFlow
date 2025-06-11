@@ -13,7 +13,7 @@ const client = new MongoClient(process.env.DB, {
 
 router.get("/status", async (req, res, next) => {
     const token = verifyToken(req);
-    if (token === null) {
+    if (token == null) {
         res.status(401).json({
             status: true,
             auth: false
