@@ -22,15 +22,20 @@ const Home = ({ setMainLoad }) => {
         }
       })
       .catch(function (error) {
-        setMainLoad(false);
-        console.log(error);
-        setCfToken("");
-        turnstile.reset();
-        Swal.fire({
-          title: "Something went wrong",
-          text: error.response.data.msg,
-          icon: "error",
-        });
+        if (error.response.data.auth == false) {
+          alert("Session timeout");
+          setMainLoad(true);
+          localStorage.removeItem("isAdmin");
+          setTimeout(() => {
+            setLoginSession(false);
+            setMainLoad(false);
+            his("/");
+            console.log(response);
+          }, 3000);
+        } else {
+          setMainLoad(false);
+          alert("Unexpected error. Please try again.");
+        }
       });
   };
 

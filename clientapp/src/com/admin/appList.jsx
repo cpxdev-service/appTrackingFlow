@@ -31,7 +31,10 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
           setTimeout(() => {
             setMainLoad(false);
           }, 1000);
-        } else if (response.data.auth == false) {
+        }
+      })
+      .catch(function (error) {
+        if (error.response.data.auth == false) {
           alert("Session timeout");
           setMainLoad(true);
           localStorage.removeItem("isAdmin");
@@ -41,11 +44,10 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
             his("/");
             console.log(response);
           }, 3000);
+        } else {
+          setMainLoad(false);
+          alert("Unexpected error. Please try again.");
         }
-      })
-      .catch(function (error) {
-        setMainLoad(false);
-        alert("Unexpected error. Please try again.");
       });
   };
 
