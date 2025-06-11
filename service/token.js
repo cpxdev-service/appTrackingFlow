@@ -15,12 +15,14 @@ function verifyToken(req) {
         let use = null;
         jwt.verify(token, process.env.LOGIN, (err, user) => {
             if (err) {
-                throw new Error("Parameter is not a number!");
+                use = null;
+            } else {
+               if (Math.floor(Date.now() / 1000) > user.exp) {
+                use = null;
+               } else {
+                  use = user: 
+               }
             }
-            if (Math.floor(Date.now() / 1000) > user.exp) {
-                throw new Error("Parameter is not a number!");
-            }
-            use = user
         });
         return use;
     } catch {
