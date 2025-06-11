@@ -2,6 +2,7 @@ FROM node:22-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm i
+RUN npm run clientsetup
 
 # คัดลอกโค้ดทั้งหมดไปยัง container
 COPY . .
@@ -14,4 +15,4 @@ ENV PORT=8080
 EXPOSE $PORT
 
 # คำสั่งรัน app (ใช้ node ตรงๆ หรือ pm2 ถ้าต้องการ process manager)
-CMD ["npm", "start"]
+CMD ["npm", "run", "api"]
