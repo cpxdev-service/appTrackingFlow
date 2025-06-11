@@ -2,10 +2,10 @@ FROM node:22-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm i
-RUN npm run clientsetup
 
 # คัดลอกโค้ดทั้งหมดไปยัง container
 COPY . .
+RUN npm run clientsetup
 RUN rm -rf clientapp/node_modules
 
 # สร้าง environment variable สำหรับ port (default 3000)
