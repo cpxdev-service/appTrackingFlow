@@ -329,7 +329,6 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
                     <Button
                       disabled={!edit}
                       onClick={() => {
-                        setCfToken("");
                         setDeleteModal(item.appId);
                         turnstile.reset();
                       }}
@@ -379,7 +378,7 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
               required
             ></TextField>
             <TextField
-              className="mt-3"
+              className="mt-4"
               label="App Description"
               variant="outlined"
               maxRows={4}
@@ -404,7 +403,14 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
               <Button type="submit" disabled={token === ""}>
                 Create
               </Button>
-              <Button onClick={() => setModal(false)}>Close</Button>
+              <Button
+                onClick={() => {
+                  setModal(false);
+                  setCfToken("");
+                }}
+              >
+                Close
+              </Button>
             </CardActionArea>
           </form>
         </CardContent>
