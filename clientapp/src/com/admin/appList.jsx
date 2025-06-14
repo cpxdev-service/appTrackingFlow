@@ -6,9 +6,13 @@ import {
   Card,
   CardContent,
   CardActions,
+  FormControlLabel,
+  Switch,
+  TextField,
   ButtonGroup,
   Typography,
   Drawer,
+  CardActionArea,
 } from "@mui/material";
 import { connect } from "react-redux";
 import { setMainLoad, setLoginSession } from "../../redux/action";
@@ -19,6 +23,7 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
   const [data, setData] = useState([]);
   const [edit, setCreateNow] = useState(false);
   const [addModal, setModal] = useState(false);
+  const [appquota, setQuo] = useState(0);
 
   const sendPostRequest = async () => {
     setMainLoad(true);
@@ -51,6 +56,88 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
       });
   };
 
+  const checkAppInstance = async () => {
+    setMainLoad(true);
+    axios
+      .post("/service/app/checkquota", {})
+      .then(function (response) {
+        if (response.data.auth == true && response.data.status === true) {
+          setTimeout(() => {
+            setMainLoad(false);
+          }, 500);
+          if (response.data.response.length == 0) {
+            alert("User not found");
+            return;
+          }
+          if (response.data.response[0].appQuota <= data.length) {
+            alert(
+              "You have reached the maximum number of App Flow Instances. Please buy more slots."
+            );
+            return;
+          }
+          setQuo(response.data.response[0].appQuota);
+          setTimeout(() => {
+            setModal(true);
+          }, 400);
+        }
+      })
+      .catch(function (error) {
+        if (error.response.data.auth == false) {
+          alert("Session timeout");
+          setMainLoad(true);
+          localStorage.removeItem("isAdmin");
+          setTimeout(() => {
+            setLoginSession(false);
+            setMainLoad(false);
+            his("/");
+            console.log(response);
+          }, 3000);
+        } else {
+          setMainLoad(false);
+          alert("Unexpected error. Please try again.");
+        }
+      });
+  };
+
+  const CreateAppInstance = async (e) => {
+    e.preventDefault();
+    console.log(e.target[5].checked);
+    setMainLoad(true);
+    axios
+      .post("/service/app/flow/create", {
+        title: e.target[0].value,
+        desc: e.target[2].value,
+      })
+      .then(function (response) {
+        if (response.data.auth == true && response.data.status === true) {
+          setTimeout(() => {
+            setModal(false);
+          }, 500);
+          if (e.target[5].checked) {
+            his("/appflow/" + response.data.appId);
+          } else {
+            sendPostRequest();
+          }
+        }
+      })
+      .catch(function (error) {
+        if (error.response.data.auth == false) {
+          alert("Session timeout");
+          setMainLoad(true);
+          localStorage.removeItem("isAdmin");
+          setTimeout(() => {
+            setLoginSession(false);
+            setMainLoad(false);
+            his("/");
+            console.log(response);
+          }, 3000);
+        } else {
+          setMainLoad(false);
+          alert("Unexpected error. Please try again.");
+        }
+      });
+  };
+
   React.useEffect(() => {
     sendPostRequest();
   }, []);
@@ -61,7 +148,11 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
         title="App Flow Instance Management"
         action={
           !mainload && (
-            <Button variant="outlined" disabled={!edit}>
+            <Button
+              variant="outlined"
+              onClick={() => checkAppInstance()}
+              disabled={!edit}
+            >
               Create new App Flow
             </Button>
           )
@@ -181,13 +272,15 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
                   <ButtonGroup
                     variant="contained"
                     sx={{ borderRadius: 30 }}
-                    aria-label="Basic button group">
+                    aria-label="Basic button group"
+                  >
                     <Button
                       disabled={!edit}
                       sx={{
                         borderTopRightRadius: "0px !important",
                         borderBottomRightRadius: "0px !important",
-                      }}>
+                      }}
+                    >
                       Edit
                     </Button>
                     <Button
@@ -195,14 +288,15 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
                       sx={{
                         borderTopLeftRadius: "0px !important",
                         borderBottomLeftRadius: "0px !important",
-                      }}>
+                      }}
+                    >
                       Delete
                     </Button>
                   </ButtonGroup>
                 }
               />
               <Typography className="m-3 mt-0">
-                5 tracking steps, 0 job process in tracking
+                {item.steps} tracking steps, {item.jobs} job process in tracking
               </Typography>
             </CardContent>
           </Card>
@@ -218,7 +312,47 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
         </Card>
       ) : null}
 
-      <Drawer open={addModal} onClose={() => {}}></Drawer>
+      <Drawer
+        open={addModal}
+        anchor="right"
+        onClose={() => {}}
+      >
+        <CardContent sx={{ maxWidth: 500 }}>
+          <CardHeader
+            title="Create App Flow"
+            subheader={
+              "You have " +
+              (appquota - data.length) +
+              " App Flow slot(s) quota which can created."
+            }
+          />
+          <form onSubmit={CreateAppInstance} autoComplete="off">
+            <TextField
+              className="mt-2"
+              label="App Name"
+              variant="outlined"
+              fullWidth
+              required
+            ></TextField>
+            <TextField
+              className="mt-3"
+              label="App Description"
+              variant="outlined"
+              maxRows={4}
+              multiline
+              fullWidth
+            ></TextField>
+            <FormControlLabel
+              control={<Switch name="navigateaftercreate" />}
+              label="Go to App Flow management page after created"
+            />
+            <CardActionArea className="mt-5">
+              <Button type="submit">Create</Button>
+              <Button onClick={() => setModal(false)}>Close</Button>
+            </CardActionArea>
+          </form>
+        </CardContent>
+      </Drawer>
     </div>
   );
 };

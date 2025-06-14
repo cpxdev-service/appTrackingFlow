@@ -42,9 +42,40 @@ router.get("/all", async (req, res, next) => {
     }
 });
 
+router.post("/checkquota", async (req, res, next) => {
+    const token = verifyToken(req);
+    if (token == null) {
+        res.status(401).json({
+            status: true,
+            auth: false
+        });
+        return;
+    }
+
+    try {
+        await client.connect();
+
+        const db = client.db('management');
+        const collection = db.collection('user');
+
+        const docs = await collection.find({ userId: token.userId }).toArray();
+        res.status(200).json({
+            status: true,
+            auth: true,
+            response: docs
+        });
+    } catch (ex) {
+        res.status(500).json({
+            status: false,
+            auth: true,
+            message: ex.message
+        });
+    }
+});
+
 router.post("/flow/create", async (req, res, next) => {
     const token = verifyToken(req);
-    if (token === null) {
+    if (token == null) {
         res.status(401).json({
             status: true,
             auth: false
@@ -59,7 +90,7 @@ router.post("/flow/create", async (req, res, next) => {
         "apiKey": generateToken({
             appId: appId,
             userId: token.userId
-        }, process.env.apiKey, '1y'),
+        }, process.env.API, '1y'),
         "steps": 0,
         "jobs": 0,
         "created": new Date(),
@@ -75,14 +106,37 @@ router.post("/flow/create", async (req, res, next) => {
     try {
         await client.connect();
 
+        const dbd = client.db('management');
+        const collectiond = dbd.collection('user');
+
+        const docsd = await collectiond.find({ userId: token.userId }).toArray();
+        if (docsd.length === 0) {
+            res.status(401).json({
+                status: false,
+                auth: true,
+                message: "User not found"
+            });
+            return;
+        }
+
         const db = client.db('appFlow');
         const collection = db.collection('appInstance');
+
+         const docsread = await collection.find({ 'user.userId': token.userId }).toArray();
+         if (docsread.length >= docsd[0].appQuota) {
+            res.status(403).json({
+                status: false,
+                auth: true,
+                message: "You have reached the maximum number of App Flow Instances. Please buy more slots."
+            });
+            return;
+        }
 
         const docs = await collection.insertOne(app);
         res.status(200).json({
             status: true,
             auth: true,
-            response: docs
+            appId: appId
         });
     } catch (ex) {
         res.status(500).json({
