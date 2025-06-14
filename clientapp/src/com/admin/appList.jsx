@@ -13,16 +13,25 @@ import {
   Typography,
   Drawer,
   CardActionArea,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { connect } from "react-redux";
+import Turnstile, { useTurnstile } from "react-turnstile";
 import { setMainLoad, setLoginSession } from "../../redux/action";
 import axios from "axios";
 
 const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
   const his = useNavigate();
+  const turnstile = useTurnstile();
   const [data, setData] = useState([]);
   const [edit, setCreateNow] = useState(false);
   const [addModal, setModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [token, setCfToken] = React.useState("");
   const [appquota, setQuo] = useState(0);
 
   const sendPostRequest = async () => {
@@ -47,7 +56,6 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
             setLoginSession(false);
             setMainLoad(false);
             his("/");
-            console.log(response);
           }, 3000);
         } else {
           setMainLoad(false);
@@ -75,9 +83,11 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
             );
             return;
           }
+          setCfToken("");
           setQuo(response.data.response[0].appQuota);
           setTimeout(() => {
             setModal(true);
+            turnstile.reset();
           }, 400);
         }
       })
@@ -90,7 +100,6 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
             setLoginSession(false);
             setMainLoad(false);
             his("/");
-            console.log(response);
           }, 3000);
         } else {
           setMainLoad(false);
@@ -107,6 +116,7 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
       .post("/service/app/flow/create", {
         title: e.target[0].value,
         desc: e.target[2].value,
+        t: token,
       })
       .then(function (response) {
         if (response.data.auth == true && response.data.status === true) {
@@ -129,7 +139,40 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
             setLoginSession(false);
             setMainLoad(false);
             his("/");
-            console.log(response);
+          }, 3000);
+        } else {
+          setMainLoad(false);
+          alert("Unexpected error. Please try again.");
+        }
+      });
+  };
+
+  const DeleteAppInstance = async (appId) => {
+    setMainLoad(true);
+    axios
+      .delete("/service/app/flow/delete", {
+        data: {
+          appId: appId,
+          t: token,
+        },
+      })
+      .then(function (response) {
+        if (response.data.auth == true && response.data.status === true) {
+          setDeleteModal(null);
+          setTimeout(() => {
+            sendPostRequest();
+          }, 2000);
+        }
+      })
+      .catch(function (error) {
+        if (error.response.data.auth == false) {
+          alert("Session timeout");
+          setMainLoad(true);
+          localStorage.removeItem("isAdmin");
+          setTimeout(() => {
+            setLoginSession(false);
+            setMainLoad(false);
+            his("/");
           }, 3000);
         } else {
           setMainLoad(false);
@@ -285,6 +328,11 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
                     </Button>
                     <Button
                       disabled={!edit}
+                      onClick={() => {
+                        setCfToken("");
+                        setDeleteModal(item.appId);
+                        turnstile.reset();
+                      }}
                       sx={{
                         borderTopLeftRadius: "0px !important",
                         borderBottomLeftRadius: "0px !important",
@@ -312,11 +360,7 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
         </Card>
       ) : null}
 
-      <Drawer
-        open={addModal}
-        anchor="right"
-        onClose={() => {}}
-      >
+      <Drawer open={addModal} anchor="right" onClose={() => {}}>
         <CardContent sx={{ maxWidth: 500 }}>
           <CardHeader
             title="Create App Flow"
@@ -346,13 +390,68 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
               control={<Switch name="navigateaftercreate" />}
               label="Go to App Flow management page after created"
             />
+
+            <Turnstile
+              sitekey={import.meta.env.VITE_CF_PUB}
+              onVerify={(token) => {
+                setCfToken(token);
+              }}
+              className="mt-3"
+              onExpire={() => setCfToken("")}
+            />
+
             <CardActionArea className="mt-5">
-              <Button type="submit">Create</Button>
+              <Button type="submit" disabled={token === ""}>
+                Create
+              </Button>
               <Button onClick={() => setModal(false)}>Close</Button>
             </CardActionArea>
           </form>
         </CardContent>
       </Drawer>
+
+      <Dialog
+        open={deleteModal}
+        onClose={() => setDeleteModal(null)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {deleteModal != null &&
+            data.length > 0 &&
+            'Do you want to delete App Flow "' +
+              data.filter((x) => x.appId == deleteModal)[0]?.appName +
+              '"?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText className="mb-3" id="alert-dialog-description">
+            All{" "}
+            {deleteModal != null &&
+              data.length > 0 &&
+              data.filter((x) => x.appId == deleteModal)[0]?.jobs}{" "}
+            job processes in this App Flow will be deleted permanently. Are you
+            sure to confirm to delete?
+          </DialogContentText>
+          <Turnstile
+            sitekey={import.meta.env.VITE_CF_PUB}
+            onVerify={(token) => {
+              setTimeout(() => {
+                setCfToken(token);
+              }, 5000);
+            }}
+            onExpire={() => setCfToken("")}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteModal(null)}>Cancel</Button>
+          <Button
+            disabled={token === ""}
+            onClick={() => DeleteAppInstance(deleteModal)}
+          >
+            Delete this App
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

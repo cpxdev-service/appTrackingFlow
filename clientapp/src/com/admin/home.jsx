@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
-import { setMainLoad } from "../../redux/action";
+import { setMainLoad, setLoginSession } from "../../redux/action";
 import axios from "axios";
 // import viteLogo from "../vite.svg";
 
-const Home = ({ setMainLoad }) => {
+const Home = ({ setMainLoad, setLoginSession }) => {
   const his = useNavigate();
   const [count, setCount] = useState(0);
   const [status, setStatus] = useState(0);
@@ -30,7 +30,6 @@ const Home = ({ setMainLoad }) => {
             setLoginSession(false);
             setMainLoad(false);
             his("/");
-            console.log(response);
           }, 3000);
         } else {
           setMainLoad(false);
@@ -48,5 +47,6 @@ const Home = ({ setMainLoad }) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setMainLoad: (val) => dispatch(setMainLoad(val)),
+  setLoginSession: (val) => dispatch(setLoginSession(val)),
 });
 export default connect(null, mapDispatchToProps)(Home);
