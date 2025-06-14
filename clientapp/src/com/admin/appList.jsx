@@ -329,6 +329,7 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
                     <Button
                       disabled={!edit}
                       onClick={() => {
+                        setCfToken("");
                         setDeleteModal(item.appId);
                         turnstile.reset();
                       }}
@@ -440,9 +441,11 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
           </DialogContentText>
           <Turnstile
             sitekey={import.meta.env.VITE_CF_PUB}
-            onVerify={(token) => {
+            onVerify={(t) => {
               setTimeout(() => {
-                setCfToken(token);
+                if (token === "") {
+                  setCfToken(t);
+                }
               }, 5000);
             }}
             onExpire={() => setCfToken("")}
