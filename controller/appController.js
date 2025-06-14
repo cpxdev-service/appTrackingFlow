@@ -147,4 +147,56 @@ router.post("/flow/create", async (req, res, next) => {
     }
 });
 
+router.post("/flow/delete", async (req, res, next) => {
+    const token = verifyToken(req);
+    if (token == null) {
+        res.status(401).json({
+            status: true,
+            auth: false
+        });
+        return;
+    }
+    try {
+        await client.connect();
+
+        const dbd = client.db('management');
+        const collectiond = dbd.collection('user');
+
+        const docsd = await collectiond.find({ userId: token.userId }).toArray();
+        if (docsd.length === 0) {
+            res.status(401).json({
+                status: false,
+                auth: true,
+                message: "User not found"
+            });
+            return;
+        }
+
+        const db = client.db('appFlow');
+        const dbjob = client.db('trackingFlow');
+
+         const docsread = await collection.find({ 'user.userId': token.userId }).toArray();
+         if (docsread.length >= docsd[0].appQuota) {
+            res.status(403).json({
+                status: false,
+                auth: true,
+                message: "You have reached the maximum number of App Flow Instances. Please buy more slots."
+            });
+            return;
+        }
+
+        await db.collection('appInstance').deleteOne({ appId: req.body.appId, 'user.userId': token.userId });
+        res.status(200).json({
+            status: true,
+            auth: true
+        });
+    } catch (ex) {
+        res.status(500).json({
+            status: false,
+            auth: true,
+            message: ex.message
+        });
+    }
+});
+
 module.exports = router;
