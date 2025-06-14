@@ -442,17 +442,20 @@ const AppList = ({ mainload, setMainLoad, setLoginSession }) => {
           <Turnstile
             sitekey={import.meta.env.VITE_CF_PUB}
             onVerify={(t) => {
-              setTimeout(() => {
-                if (token === "") {
-                  setCfToken(t);
-                }
-              }, 5000);
+              setCfToken(t);
             }}
             onExpire={() => setCfToken("")}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteModal(null)}>Cancel</Button>
+          <Button
+            onClick={() => {
+              setDeleteModal(null);
+              setCfToken("");
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             disabled={token === ""}
             onClick={() => DeleteAppInstance(deleteModal)}
